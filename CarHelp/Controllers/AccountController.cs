@@ -19,11 +19,15 @@ namespace CarHelp.Controllers
             this.accountService = accountService;
         }
 
-        [HttpGet("test")]
-        //[HttpGet("code/{phone:string}")]
+        [HttpGet("code/{phone}")]
         public async Task<IActionResult> GetSmsCode([FromRoute]string phone)
         {
-            accountService.GenerateSmsCode();
+            if (!accountService.ValidatePhone(phone))
+            {
+                return BadRequest();
+            }
+
+            await accountService.GenerateSmsCode(phone);
 
             return Ok();
         }

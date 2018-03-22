@@ -19,6 +19,7 @@ namespace CarHelp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<ISmsService, SmsService>();
             services.AddTransient(typeof(IRepository<>), typeof(L2DBRepository<>));
 
             services.AddTokenAuthorization();

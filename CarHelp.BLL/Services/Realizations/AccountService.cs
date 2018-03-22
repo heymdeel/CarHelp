@@ -13,48 +13,24 @@ namespace CarHelp.BLL.Services
 {
     public class AccountService : IAccountService
     {
-        private static Random rnd = new Random();
-        private readonly IRepository<SmsCode> smsCodesRepository;
         private readonly IRepository<User> usersRepository;
         private readonly IRepository<UserProfile> profilesRepository;
 
-        public AccountService(IRepository<SmsCode> smsCodesRepository, IRepository<User> usersRepository, IRepository<UserProfile> profilesRepository)
+        public AccountService(IRepository<User> usersRepository, IRepository<UserProfile> profilesRepository)
         {
-            this.smsCodesRepository = smsCodesRepository;
             this.usersRepository = usersRepository;
             this.profilesRepository = profilesRepository;
         }
 
-        public bool ValidatePhone(string phone) => Regex.IsMatch(phone, "^[7][0-9]{10}$");
-
-        public async Task GenerateSmsCodeAsync(string phone)
-        {
-            int code = rnd.Next(1000, 9999);
-            SmsCode sms = await smsCodesRepository.FirstOrDefaultAsync(filter: s => s.Phone == phone);
-
-            if (sms == null)
-            {
-                await smsCodesRepository.CreateAsync(new SmsCode() { Phone = phone, Code = code, TimeStamp = DateTime.Now });
-            }
-            else
-            {
-                sms.Code = code;
-                sms.TimeStamp = DateTime.Now;
-                await smsCodesRepository.UpdateAsync(sms);
-            }
-
-            // TODO: send SMS via some service
-        }
-
         public async Task<User> SignUpUserAsync(UserSignUpDTO userData)
         {
-            SmsCode sms = await smsCodesRepository.FirstOrDefaultAsync(filter: x => x.Code == userData.SmsCode && x.Phone == userData.Phone);
-            if (sms == null)
+            var user = new User
             {
-                return null;
-            }
+                Phone = userData.Phone,
+                DateOfRegistration = DateTime.Now,
+                Roles = new string[] { "client", "worker" }
+            };
 
-            var user = new User { Phone = userData.Phone, DateOfRegistration = DateTime.Now, Roles = new string[] { "client", "worker" } };
             await usersRepository.CreateAsync(user);
             User createdUser = await usersRepository.FirstOrDefaultAsync(filter: u => u.Phone == userData.Phone);
 
@@ -62,21 +38,13 @@ namespace CarHelp.BLL.Services
             userProfile.Id = createdUser.Id;
 
             await profilesRepository.CreateAsync(userProfile);
-            await smsCodesRepository.RemoveAsync(sms);
 
             return createdUser;
         }
 
         public async Task<User> SignInUserAsync(UserSignInDTO userData)
         {
-            SmsCode sms = await smsCodesRepository.FirstOrDefaultAsync(filter: s => s.Code == userData.SmsCode & s.Phone == userData.Phone);
-            if (sms == null)
-            {
-                return null;
-            }
-
             User user = await usersRepository.FirstOrDefaultAsync(filter: u => u.Phone == userData.Phone);
-            await smsCodesRepository.RemoveAsync(sms);
 
             return user;
         }
@@ -86,7 +54,7 @@ namespace CarHelp.BLL.Services
             return await usersRepository.FirstOrDefaultAsync(filter: u => u.Phone == phone) != null;
         }
 
-        public async Task SaveUserTokenAsync(User user, string refreshToken)
+        public async Task StoreRefreshTokenAsync(User user, string refreshToken)
         {
             user.RefreshToken = refreshToken;
             await usersRepository.UpdateAsync(user);
@@ -102,11 +70,10 @@ namespace CarHelp.BLL.Services
             User user = await usersRepository.FirstOrDefaultAsync(u => u.Id == userId && u.RefreshToken == refreshToken);
             if (user == null)
             {
-                Console.WriteLine("user not found");
                 return;
             }
 
-            user.RefreshToken = "";
+            user.RefreshToken = String.Empty;
 
             await usersRepository.UpdateAsync(user);
         }

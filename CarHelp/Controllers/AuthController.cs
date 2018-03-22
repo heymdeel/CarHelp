@@ -21,22 +21,24 @@ namespace CarHelp.Controllers
     public class AuthController : Controller
     {
         private readonly IAccountService accountService;
+        private readonly ISmsService smsService;
 
-        public AuthController(IAccountService accountService)
+        public AuthController(IAccountService accountService, ISmsService smsService)
         {
             this.accountService = accountService;
+            this.smsService = smsService;
         }
 
         // POST: api/sms_code
         [HttpPost("sms_code")]
         public async Task<IActionResult> GetSmsCode([FromBody]string phone)
         {
-            if (!accountService.ValidatePhone(phone))
+            if (!smsService.ValidatePhone(phone))
             {
-                return BadRequest();
+                return BadRequest("bad phone format");
             }
 
-            await accountService.GenerateSmsCodeAsync(phone);
+            await smsService.SendCodeAsync(phone);
 
             return Ok();
         }
@@ -50,17 +52,17 @@ namespace CarHelp.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (!await smsService.CodeIsValidAsync(userData.Phone, userData.SmsCode))
+            {
+                return BadRequest("invalid code");
+            }
+
             if (await accountService.UserExistsAsync(userData.Phone))
             {
                 return BadRequest("user already exists");
             }
 
             User user = await accountService.SignUpUserAsync(userData);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
             var tokenVM = await GetTokenVMAsync(user);
 
             return Ok(tokenVM);
@@ -73,6 +75,11 @@ namespace CarHelp.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            if (!await smsService.CodeIsValidAsync(userData.Phone, userData.SmsCode))
+            {
+                return BadRequest("invalid code");
             }
 
             User user = await accountService.SignInUserAsync(userData);
@@ -92,7 +99,7 @@ namespace CarHelp.Controllers
         {
             if (!ValidateRerfreshToken(refreshToken))
             {
-                return NotFound();
+                return BadRequest("invalid token. need to sign in");
             }
 
             int userId = int.Parse(new JwtSecurityTokenHandler().ReadJwtToken(refreshToken).Claims.FirstOrDefault(c => c.Type == "user_id").Value);
@@ -114,7 +121,7 @@ namespace CarHelp.Controllers
         {
             if (!ValidateRerfreshToken(refreshToken))
             {
-                return NotFound();
+                return BadRequest("invalid token. need to sign in");
             }
 
             int userId = int.Parse(new JwtSecurityTokenHandler().ReadJwtToken(refreshToken).Claims.FirstOrDefault(c => c.Type == "user_id").Value);
@@ -157,11 +164,11 @@ namespace CarHelp.Controllers
             string refreshToken = GenerateToken(identity, TokenType.Refresh);
             string accessToken = GenerateToken(identity, TokenType.Access);
 
-            await accountService.SaveUserTokenAsync(user, refreshToken);
-            user.RefreshToken = refreshToken;
+            await accountService.StoreRefreshTokenAsync(user, refreshToken);
 
             var tokenVM = Mapper.Map<TokenVM>(user);
             tokenVM.AccessToken = accessToken;
+            tokenVM.RefreshToken = refreshToken;
 
             return tokenVM;
         }

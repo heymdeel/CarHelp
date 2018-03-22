@@ -9,9 +9,6 @@ namespace CarHelp.BLL.Services
 {
     public interface IAccountService
     {
-        Task GenerateSmsCodeAsync(string phone);
-        bool ValidatePhone(string phone);
-
         Task<bool> UserExistsAsync(string phone);
         Task<User> FindUserByIdAsync(int id);
 
@@ -19,6 +16,6 @@ namespace CarHelp.BLL.Services
         Task<User> SignInUserAsync(UserSignInDTO userData);
 
         Task InvalidateTokenAsync(int userId, string refreshToken);
-        Task SaveUserTokenAsync(User user, string refreshToken);
+        Task StoreRefreshTokenAsync(User user, string refreshToken);
     }
 }

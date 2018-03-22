@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CarHelp.DAL
 {
-    public class ConnectionStringSettings : IConnectionStringSettings
+    internal class ConnectionStringSettings : IConnectionStringSettings
     {
         public string ConnectionString { get; set; }
         public string Name { get; set; }
@@ -15,7 +15,7 @@ namespace CarHelp.DAL
         public bool IsGlobal => false;
     }
 
-    public class MySettings : ILinqToDBSettings
+    internal class MySettings : ILinqToDBSettings
     {
         public IEnumerable<IDataProviderSettings> DataProviders
         {
@@ -40,7 +40,7 @@ namespace CarHelp.DAL
         }
     }
 
-    public partial class L2DBContext : LinqToDB.Data.DataConnection
+    internal partial class L2DBContext : LinqToDB.Data.DataConnection
     {
         public ITable<SmsCode> SmsCodes { get => GetTable<SmsCode>(); }
         public ITable<Order> Orders { get => GetTable<Order>(); }

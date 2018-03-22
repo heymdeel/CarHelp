@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CarHelp
+namespace CarHelp.Options
 {
-    public class AuthorizationHeaderParameterOperationFilter : IOperationFilter
+    internal class AuthorizationHeaderParameterOperationFilter : IOperationFilter
     {
         public void Apply(Operation operation, OperationFilterContext context)
         {

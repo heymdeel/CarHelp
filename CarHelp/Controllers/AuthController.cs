@@ -102,8 +102,8 @@ namespace CarHelp.Controllers
                 return BadRequest("invalid token. need to sign in");
             }
 
-            int userId = int.Parse(new JwtSecurityTokenHandler().ReadJwtToken(refreshToken).Claims.FirstOrDefault(c => c.Type == "user_id").Value);
-            
+            int userId = GetUserIdFromToken(refreshToken);
+
             User user = await accountService.FindUserByIdAsync(userId);
             if (user == null)
             {
@@ -121,10 +121,10 @@ namespace CarHelp.Controllers
         {
             if (!ValidateRerfreshToken(refreshToken))
             {
-                return BadRequest("invalid token. need to sign in");
+                return BadRequest("invalid token");
             }
 
-            int userId = int.Parse(new JwtSecurityTokenHandler().ReadJwtToken(refreshToken).Claims.FirstOrDefault(c => c.Type == "user_id").Value);
+            int userId = GetUserIdFromToken(refreshToken);
 
             await accountService.InvalidateTokenAsync(userId, refreshToken);
 
@@ -148,7 +148,7 @@ namespace CarHelp.Controllers
             // TODO: change security algorithm
             var jwt = new JwtSecurityToken(
                     issuer: AuthOptions.ISSUER,
-                    audience: tokenType == TokenType.Access ? AuthOptions.ACCESS_AUDIENCE : AuthOptions.REFRESH_AUDIENCE,
+                    audience: tokenType == TokenType.Refresh ? AuthOptions.REFRESH_AUDIENCE : AuthOptions.ACCESS_AUDIENCE,
                     notBefore: DateTime.Now,
                     claims: identity.Claims,
                     expires: DateTime.Now.AddMinutes(tokenType == TokenType.Refresh ? AuthOptions.REFRESH_LIFETIME : AuthOptions.ACCESS_LIFETIME),
@@ -207,5 +207,7 @@ namespace CarHelp.Controllers
 
             return true;
         }
+
+        private int GetUserIdFromToken(string refreshToken) => int.Parse(new JwtSecurityTokenHandler().ReadJwtToken(refreshToken).Claims.FirstOrDefault(c => c.Type == "user_id").Value);
     }
 }

@@ -29,17 +29,9 @@ namespace CarHelp
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Title = "CarHelp API", Version = "v1" });
 
                 c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
-
-                //c.AddSecurityDefinition("Bearer", new ApiKeyScheme()
-                //{
-                //    In = "header",
-                //    Description = "Please insert JWT with Bearer into field",
-                //    Name = "Authorization",
-                //    Type = "apiKey"
-                //});
             });
         }
 
@@ -52,7 +44,7 @@ namespace CarHelp
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarHelp API V1");
 
                     c.DocExpansion(DocExpansion.None);
                 });

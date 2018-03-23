@@ -22,6 +22,16 @@ namespace CarHelp.BLL.Services
             this.profilesRepository = profilesRepository;
         }
 
+        public async Task<bool> UserExistsAsync(string phone)
+        {
+            return await usersRepository.FirstOrDefaultAsync(filter: u => u.Phone == phone) != null;
+        }
+
+        public async Task<User> FindUserByIdAsync(int id)
+        {
+            return await usersRepository.FirstOrDefaultAsync(filter: u => u.Id == id);
+        }
+
         public async Task<User> SignUpUserAsync(UserSignUpDTO userData)
         {
             var user = new User
@@ -44,25 +54,7 @@ namespace CarHelp.BLL.Services
 
         public async Task<User> SignInUserAsync(UserSignInDTO userData)
         {
-            User user = await usersRepository.FirstOrDefaultAsync(filter: u => u.Phone == userData.Phone);
-
-            return user;
-        }
-
-        public async Task<bool> UserExistsAsync(string phone)
-        {
-            return await usersRepository.FirstOrDefaultAsync(filter: u => u.Phone == phone) != null;
-        }
-
-        public async Task StoreRefreshTokenAsync(User user, string refreshToken)
-        {
-            user.RefreshToken = refreshToken;
-            await usersRepository.UpdateAsync(user);
-        }
-
-        public async Task<User> FindUserByIdAsync(int id)
-        {
-            return await usersRepository.FirstOrDefaultAsync(filter: u => u.Id == id);
+            return await usersRepository.FirstOrDefaultAsync(filter: u => u.Phone == userData.Phone);
         }
 
         public async Task InvalidateTokenAsync(int userId, string refreshToken)
@@ -75,6 +67,12 @@ namespace CarHelp.BLL.Services
 
             user.RefreshToken = String.Empty;
 
+            await usersRepository.UpdateAsync(user);
+        }
+
+        public async Task StoreRefreshTokenAsync(User user, string refreshToken)
+        {
+            user.RefreshToken = refreshToken;
             await usersRepository.UpdateAsync(user);
         }
     }

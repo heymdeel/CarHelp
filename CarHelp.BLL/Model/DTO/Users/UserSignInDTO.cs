@@ -8,7 +8,7 @@ namespace CarHelp.BLL.Model.DTO
 {
     public class UserSignInDTO
     {
-        [Required, RegularExpression("^[7-8][0-9]{10}$")]
+        [Required, RegularExpression("^[7][0-9]{10}$")]
         public string Phone { get; set; }
 
         [Required, Range(1000, 9999)]

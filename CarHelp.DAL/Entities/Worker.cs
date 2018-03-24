@@ -1,4 +1,5 @@
 ﻿using LinqToDB.Mapping;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +10,7 @@ namespace CarHelp.DAL.Entities
     public partial class Worker
     {
         [Column(@"id"), PrimaryKey, NotNull] public int Id { get; set; } // integer
-        [Column(@"location"), NotNull] public string Location { get; set; } // character varying
+        [Column(@"location"), NotNull] public PostgisGeometry Location { get; set; } // character varying
         [Column(@"status"), NotNull] public int StatusId { get; set; } // integer
 
         #region Associations

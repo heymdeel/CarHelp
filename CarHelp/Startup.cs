@@ -20,7 +20,11 @@ namespace CarHelp
         {
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<ISmsService, SmsService>();
+            
             services.AddTransient(typeof(IRepository<>), typeof(L2DBRepository<>));
+
+            services.AddTransient<IOrdersService, OrdersService>();
+            services.AddTransient<IWorkersRepository, WorkersRepository>();
 
             services.AddTokenAuthorization();
 

@@ -17,7 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace CarHelp.Controllers
 {
     [Produces("application/json")]
-    [Route("api")]
+    [Route("api/auth")]
     public class AuthController : Controller
     {
         private readonly IAccountService accountService;
@@ -29,7 +29,7 @@ namespace CarHelp.Controllers
             this.smsService = smsService;
         }
 
-        // POST: api/sms_code
+        // POST: api/auth/sms_code
         [HttpPost("sms_code")]
         public async Task<IActionResult> GetSmsCode([FromBody]string phone)
         {
@@ -43,8 +43,8 @@ namespace CarHelp.Controllers
             return Ok();
         }
 
-        // POST: api/users
-        [HttpPost("users")]
+        // POST: api/auth/sing_up
+        [HttpPost("sign_up")]
         public async Task<IActionResult> SignUpUser([FromBody]UserSignUpDTO userData)
         {
             if (!ModelState.IsValid)
@@ -68,7 +68,7 @@ namespace CarHelp.Controllers
             return Ok(tokenVM);
         }
 
-        // POST: api/sign_in
+        // POST: api/auth/sign_in
         [HttpPost("sign_in")]
         public async Task<IActionResult> SignInUser([FromBody]UserSignInDTO userData)
         {
@@ -93,7 +93,7 @@ namespace CarHelp.Controllers
             return Ok(tokenVM);
         }
 
-        // POST: api/token
+        // POST: api/auth/token
         [HttpPost("token")]
         public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
         {
@@ -115,7 +115,7 @@ namespace CarHelp.Controllers
             return Ok(tokenVM);
         }
 
-        // DELETE: api/token
+        // DELETE: api/auth/token
         [HttpDelete("token")]
         public async Task<IActionResult> InvalidateToken([FromBody] string refreshToken)
         {
@@ -128,7 +128,7 @@ namespace CarHelp.Controllers
 
             await accountService.InvalidateTokenAsync(userId, refreshToken);
 
-            return NoContent(); ;
+            return NoContent();
         }
 
         private ClaimsIdentity GetIdentity(User user)

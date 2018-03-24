@@ -14,7 +14,8 @@ namespace CarHelp.DAL
         public string ProviderName { get; set; }
         public bool IsGlobal => false;
     }
-
+    
+    // TODO: move connection string to configuration file
     internal class MySettings : ILinqToDBSettings
     {
         public IEnumerable<IDataProviderSettings> DataProviders

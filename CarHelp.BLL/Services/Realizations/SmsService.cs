@@ -26,6 +26,7 @@ namespace CarHelp.BLL.Services
 
             if (sms != null)
             {
+                // TODO: uncomment this
                 //await smsRepository.RemoveAsync(sms);
                 return true;
             }
@@ -35,6 +36,7 @@ namespace CarHelp.BLL.Services
 
         public async Task SendCodeAsync(string phone)
         {
+            // TODO: uncomment this
             //int code = rnd.Next(1000, 9999);
             int code = 1111;
             SmsCode sms = await smsRepository.FirstOrDefaultAsync(filter: s => s.Phone == phone);

@@ -11,8 +11,6 @@ namespace CarHelp.DAL.Repositories
     {
         IQueryable<T> GetQueryable();
 
-        void TestGenericMethod();
-
         Task CreateAsync(T item);
         Task RemoveAsync(T item);
         Task UpdateAsync(T item);

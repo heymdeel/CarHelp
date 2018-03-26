@@ -103,10 +103,5 @@ namespace CarHelp.DAL.Repositories
                 return await query.FirstOrDefaultAsync();
             }
         }
-
-        public void TestGenericMethod()
-        {
-            Console.WriteLine($"generic method, type == {typeof(T)}");
-        }
     }
 }

@@ -16,8 +16,9 @@ namespace CarHelp.Options
         public const string REFRESH_AUDIENCE = "CarHelpRefreshToken";
         const string KEY = "token_secret_key_fhsy23#4&sd*fd33";
 
+        // TODO: Change access lifetime to 15 minutes
         public const int REFRESH_LIFETIME = 180 * 24 * 60;
-        public const int ACCESS_LIFETIME = 15;
+        public const int ACCESS_LIFETIME = 180 * 24 * 60;
 
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {

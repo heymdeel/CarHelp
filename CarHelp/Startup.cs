@@ -23,6 +23,7 @@ namespace CarHelp
             
             services.AddTransient(typeof(IRepository<>), typeof(L2DBRepository<>));
 
+            services.AddTransient<IWorkersService, WorkersService>();
             services.AddTransient<IOrdersService, OrdersService>();
             services.AddTransient<IWorkersRepository, WorkersRepository>();
 

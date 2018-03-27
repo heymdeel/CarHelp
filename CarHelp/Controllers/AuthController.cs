@@ -29,9 +29,11 @@ namespace CarHelp.Controllers
             this.smsService = smsService;
         }
 
-        // POST: api/auth/sms_code
-        [HttpPost("sms_code")]
-        public async Task<IActionResult> GetSmsCode([FromBody]string phone)
+        // GET: api/auth/sms_code
+        /// <summary> Request for sending code via sms</summary>
+        /// <response code="400">bad phone format</response>
+        [HttpGet("sms_code")]
+        public async Task<IActionResult> GetSmsCode([FromQuery]string phone)
         {
             if (!smsService.ValidatePhone(phone))
             {
@@ -44,7 +46,11 @@ namespace CarHelp.Controllers
         }
 
         // POST: api/auth/sing_up
+        /// <summary> Sign up user </summary>
+        /// <response code="400">invalid code, errors in model validation or user already exists</response>
+        /// <response code="200">tokens and user's roles</response>
         [HttpPost("sign_up")]
+        [ProducesResponseType(typeof(TokenVM), 200)]
         public async Task<IActionResult> SignUpUser([FromBody]UserSignUpDTO userData)
         {
             if (!ModelState.IsValid)
@@ -69,7 +75,12 @@ namespace CarHelp.Controllers
         }
 
         // POST: api/auth/sign_in
+        /// <summary> Sign in user </summary>
+        /// <response code="200">tokens and user's roles</response>
+        /// <response code="400">invalid code or errors in model validation</response>
+        /// <response code="404">user wasn't found</response>
         [HttpPost("sign_in")]
+        [ProducesResponseType(typeof(TokenVM), 200)]
         public async Task<IActionResult> SignInUser([FromBody]UserSignInDTO userData)
         {
             if (!ModelState.IsValid)
@@ -87,15 +98,20 @@ namespace CarHelp.Controllers
             {
                 return NotFound();
             }
-
+            
             var tokenVM = await GetTokenVMAsync(user);
 
             return Ok(tokenVM);
         }
 
         // POST: api/auth/token
+        /// <summary> Get new access and refresh token</summary>
+        /// <response code="200">tokens and user's roles</response>
+        /// <response code="400">invalid refresh token</response>
+        /// <response code="404">user with this token wasn't found</response>
         [HttpPost("token")]
-        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+        [ProducesResponseType(typeof(TokenVM), 200)]
+        public async Task<IActionResult> RefreshTokens([FromBody] string refreshToken)
         {
             if (!ValidateRerfreshToken(refreshToken))
             {
@@ -116,6 +132,8 @@ namespace CarHelp.Controllers
         }
 
         // DELETE: api/auth/token
+        /// <summary> Invalidate refresh token </summary>
+        /// <responce code="400"> invalid refresh token </responce>
         [HttpDelete("token")]
         public async Task<IActionResult> InvalidateToken([FromBody] string refreshToken)
         {

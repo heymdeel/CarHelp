@@ -25,8 +25,14 @@ namespace CarHelp.Controllers
             this.ordersService = ordersService;
         }
 
+        // GET: api/workers/closest?latitude&longitude&category
+        /// <summary> Get list of workers in user's radius which can perform order </summary>
+        /// <response code="200"> list of workers with distances and prices </response>
+        /// <response code="400"> errors in model validation or wrong order category</response>
+        /// <response code="404"> no workers were found =\ Sorry, mate </response>
         [HttpGet("closest")]
         [Authorize(Roles = "client")]
+        [ProducesResponseType(typeof(ClosestWorkersVM), 200)]
         public async Task<IActionResult> GetClosestWorkers([FromQuery]double latitude, [FromQuery]double longitude, [FromQuery(Name = "category")]int categoryId)
         {
             var clientData = new ClientCallHelpDTO

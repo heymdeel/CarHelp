@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace CarHelp
@@ -32,11 +34,12 @@ namespace CarHelp
             services.AddMvc();
             services.AddAutoMapper();
 
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(swagger =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "CarHelp API", Version = "v1" });
+                swagger.SwaggerDoc("v1", new Info { Title = "CarHelp API", Version = "v1" });
+                swagger.IncludeXmlComments(Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "CarHelp.xml"));
 
-                c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
+                swagger.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
             });
         }
 

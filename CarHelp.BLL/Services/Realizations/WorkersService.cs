@@ -18,7 +18,7 @@ namespace CarHelp.BLL.Services
             this.workersRepository = workersRepository;
         }
 
-        public async Task<IEnumerable<(double price, UserProfile worker)>> GetClosestWorkersAsync(ClientCallHelpDTO clientData)
+        public async Task<IEnumerable<(double price, double distance, UserProfile worker)>> GetClosestWorkersAsync(ClientCallHelpDTO clientData)
         {
             var workers = await workersRepository.GetClosestWorkersAsync(clientData.Latitude, clientData.Longitude, 5000, clientData.CategoryId);
 

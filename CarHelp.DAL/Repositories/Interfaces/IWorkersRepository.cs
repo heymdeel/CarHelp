@@ -8,6 +8,6 @@ namespace CarHelp.DAL.Repositories
 {
     public interface IWorkersRepository : IRepository<Worker>
     {
-        Task<IEnumerable<(double price, UserProfile worker)>> GetClosestWorkersAsync(double latitude, double longitude, double distance, int categoryId);
+        Task<IEnumerable<(double price, double distance, UserProfile worker)>> GetClosestWorkersAsync(double latitude, double longitude, double radius, int categoryId);
     }
 }

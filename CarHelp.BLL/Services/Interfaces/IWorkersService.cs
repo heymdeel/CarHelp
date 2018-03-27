@@ -9,6 +9,6 @@ namespace CarHelp.BLL.Services
 {
     public interface IWorkersService
     {
-        Task<IEnumerable<(double price, UserProfile worker)>> GetClosestWorkersAsync(ClientCallHelpDTO clientData);
+        Task<IEnumerable<(double price, double distance, UserProfile worker)>> GetClosestWorkersAsync(ClientCallHelpDTO clientData);
     }
 }

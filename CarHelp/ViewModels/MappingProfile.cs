@@ -7,11 +7,16 @@ using System.Threading.Tasks;
 
 namespace CarHelp.ViewModels
 {
-    internal class MappingProfile: Profile
+    internal class MappingProfileVM: Profile
     {
-        public MappingProfile()
+        public MappingProfileVM()
         {
             CreateMap<User, TokenVM>();
+            CreateMap<UserProfile, UserProfileVM>();
+            CreateMap<(double price, double distance, UserProfile worker), ClosestWorkersVM>()
+                .ForMember(vm => vm.Distance, r => r.MapFrom(cw => cw.distance))
+                .ForMember(vm => vm.Price, r => r.MapFrom(cw => cw.price))
+                .ForMember(vm => vm.Worker, r => r.MapFrom(cw => cw.worker));
         }
     }
 }

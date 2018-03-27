@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using CarHelp.BLL.Model.DTO;
 using CarHelp.BLL.Services;
+using CarHelp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +52,9 @@ namespace CarHelp.Controllers
                 return NotFound();
             }
 
-            return Ok(workers);
+            var workersVM = Mapper.Map<IEnumerable<ClosestWorkersVM>>(workers);
+
+            return Ok(workersVM);
         }
     }
 }

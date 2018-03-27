@@ -36,7 +36,6 @@ namespace CarHelp.BLL.Services
         public async Task SendCodeAsync(string phone)
         {
             int code = rnd.Next(1000, 9999);
-            int code = 1111;
             SmsCode sms = await smsRepository.FirstOrDefaultAsync(filter: s => s.Phone == phone);
 
             if (sms == null)

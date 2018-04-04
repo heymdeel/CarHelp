@@ -29,6 +29,7 @@ namespace CarHelp.Controllers
         /// <summary> Get list of workers in user's radius which can perform order </summary>
         /// <response code="200"> list of workers with distances and prices </response>
         /// <response code="400"> errors in model validation or wrong order category</response>
+        /// <response code="401"> Unathorized </response>
         /// <response code="404"> no workers were found =\ Sorry, mate </response>
         [HttpGet("closest")]
         [Authorize(Roles = "client")]

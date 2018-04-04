@@ -1,4 +1,5 @@
-﻿using CarHelp.BLL.Model.DTO;
+﻿using CarHelp.BLL.Model.BusinessModels;
+using CarHelp.BLL.Model.DTO;
 using CarHelp.DAL.Entities;
 using CarHelp.DAL.Repositories;
 using System;
@@ -12,10 +13,12 @@ namespace CarHelp.BLL.Services
     public class WorkersService : IWorkersService
     {
         private readonly IWorkersRepository workersRepository;
+        private readonly IRepository<WorkerSupportedCategories> supportedCategoriesRepo;
 
-        public WorkersService(IWorkersRepository workersRepository)
+        public WorkersService(IWorkersRepository workersRepository, IRepository<WorkerSupportedCategories> supportedCategoriesRepo)
         {
             this.workersRepository = workersRepository;
+            this.supportedCategoriesRepo = supportedCategoriesRepo;
         }
 
         public async Task<IEnumerable<(double price, double distance, UserProfile worker)>> GetClosestWorkersAsync(ClientCallHelpDTO clientData)
@@ -33,6 +36,16 @@ namespace CarHelp.BLL.Services
         public async Task Test()
         {
             await workersRepository.Test();
+        }
+
+        public async Task<WorkerSupportedCategories> GetSupportedCategoryAsync(int workerId, int categoryId)
+        {
+            return await supportedCategoriesRepo.FirstOrDefaultAsync(c => c.IdCategory == categoryId && c.IdWorker == workerId);
+        }
+
+        public async Task<bool> WorkerIsOnlineAsync(int workerId)
+        {
+            return await workersRepository.FirstOrDefaultAsync(filter: w => w.Id == workerId && w.StatusId == (int)WorkersStatuses.Online) != null;
         }
     }
 }

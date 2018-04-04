@@ -32,6 +32,11 @@ namespace CarHelp.BLL.Services
             return await usersRepository.FirstOrDefaultAsync(filter: u => u.Id == id);
         }
 
+        public async Task<UserProfile> GetUserProfileAsync(int userId)
+        {
+            return await profilesRepository.FirstOrDefaultAsync(filter: p => p.Id == userId);
+        }
+
         public async Task<User> SignUpUserAsync(UserSignUpDTO userData)
         {
             var user = new User

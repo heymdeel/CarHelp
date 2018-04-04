@@ -28,6 +28,7 @@ namespace CarHelp
             services.AddTransient<IWorkersService, WorkersService>();
             services.AddTransient<IOrdersService, OrdersService>();
             services.AddTransient<IWorkersRepository, WorkersRepository>();
+            services.AddTransient<IOrdersRepository, OrdersRepository>();
 
             services.AddTokenAuthorization();
 

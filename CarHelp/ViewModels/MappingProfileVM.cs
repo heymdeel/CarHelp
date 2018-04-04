@@ -17,6 +17,8 @@ namespace CarHelp.ViewModels
                 .ForMember(vm => vm.Distance, r => r.MapFrom(cw => cw.distance))
                 .ForMember(vm => vm.Price, r => r.MapFrom(cw => cw.price))
                 .ForMember(vm => vm.Worker, r => r.MapFrom(cw => cw.worker));
+
+            CreateMap<Order, CreatedOrderVM>();
         }
     }
 }

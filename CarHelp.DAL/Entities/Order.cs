@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using NpgsqlTypes;
 
 namespace CarHelp.DAL.Entities
 {
@@ -11,12 +12,12 @@ namespace CarHelp.DAL.Entities
         [Column(@"id"), PrimaryKey, Identity] public int Id { get; set; } // integer
         [Column(@"client"), NotNull] public int ClientId { get; set; } // integer
         [Column(@"worker"), NotNull] public int WorkerId { get; set; } // integer
-        [Column(@"location"), NotNull] public object Location { get; set; } // USER-DEFINED
+        [Column(@"location"), NotNull] public PostgisGeometry Location { get; set; } // USER-DEFINED
         [Column(@"begining_time"), NotNull] public DateTime BeginingTime { get; set; } // timestamp (6) without time zone
         [Column(@"end_time"), Nullable] public DateTime? EndTime { get; set; } // timestamp (6) without time zone
         [Column(@"category"), NotNull] public int CategoryId { get; set; } // integer
         [Column(@"status"), NotNull] public int StatusId { get; set; } // integer
-        [Column(@"summary"), Nullable] public double? Summary { get; set; } // double precision
+        [Column(@"summary"), Nullable] public double? Price { get; set; } // double precision
         [Column(@"rate"), Nullable] public int? Rate { get; set; } // integer
 
         #region Associations

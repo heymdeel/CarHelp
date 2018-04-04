@@ -78,6 +78,7 @@ namespace CarHelp.DAL.Repositories
             }
         }
 
+        // TODO: remove this
         public async Task Test()
         {
             var basePhoneNumber = 7000000000;

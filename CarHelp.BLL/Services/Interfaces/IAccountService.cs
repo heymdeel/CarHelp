@@ -11,6 +11,7 @@ namespace CarHelp.BLL.Services
     {
         Task<bool> UserExistsAsync(string phone);
         Task<User> FindUserByIdAsync(int id);
+        Task<UserProfile> GetUserProfileAsync(int userId);
 
         Task<User> SignUpUserAsync(UserSignUpDTO userData);
         Task<User> SignInUserAsync(UserSignInDTO userData);

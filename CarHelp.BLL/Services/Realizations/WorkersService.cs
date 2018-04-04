@@ -29,5 +29,10 @@ namespace CarHelp.BLL.Services
 
             return workers;
         }
+
+        public async Task Test()
+        {
+            await workersRepository.Test();
+        }
     }
 }

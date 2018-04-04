@@ -57,10 +57,18 @@ namespace CarHelp.Controllers
             {
                 return NotFound();
             }
-
+            
             var workersVM = Mapper.Map<IEnumerable<ClosestWorkersVM>>(workers);
 
             return Ok(workersVM);
+        }
+
+        [HttpGet("test")]
+        public async Task<IActionResult> Test()
+        {
+            await workersService.Test();
+
+            return Ok();
         }
     }
 }

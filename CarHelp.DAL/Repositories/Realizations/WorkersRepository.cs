@@ -6,6 +6,7 @@ using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,10 +32,9 @@ namespace CarHelp.DAL.Repositories
 	                                    (select id, price, location from 
 		                                    (select id, location from workers 
 		                                    where ST_Distance_Sphere(location, ST_SetSRID(ST_Point(@latitude, @longitude), 4326)) <= @radius and status = 1) as closest_workers 
-	                                    inner join worker_supported_categories on closest_workers.id = id_worker where id_category = @category) as workers_price
+	                                    inner join worker_supported_categories on closest_workers.id = id_worker where id_category = @category limit 20) as workers_price
                                    inner join user_profiles on workers_price.id = user_profiles.id
-                                   order by distance asc
-                                   limit 20";
+                                   order by distance asc";
 
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
@@ -75,6 +75,66 @@ namespace CarHelp.DAL.Repositories
                 }
 
                 return workers;
+            }
+        }
+
+        public async Task Test()
+        {
+            var basePhoneNumber = 7000000000;
+
+            string baseName = "user";
+            var rand = new Random();
+
+            string[] roles = { "client", "worker" };
+
+            var user = new User();
+            var profile = new UserProfile();
+            var worker = new Worker();
+            var supp = new WorkerSupportedCategories();
+
+            using (var db = new L2DBContext())
+            {
+                int j = 1;
+                for (var i = basePhoneNumber; j < 100000; i++, j++)
+                {
+                    user.Phone = (basePhoneNumber + j).ToString();
+                    user.Roles = roles;
+                    user.DateOfRegistration = DateTime.Now;
+                    user.Id = j;
+
+                    await db.GetTable<User>()
+                            .Value(u => u.Phone, user.Phone)
+                            .Value(u => u.Roles, user.Roles)
+                            .Value(u => u.DateOfRegistration, user.DateOfRegistration)
+                            .Value(u => u.Id, user.Id)
+                            .InsertAsync();
+
+                    var kekName = baseName + j.ToString();
+
+                    profile.Name = kekName;
+                    profile.Surname = kekName;
+                    profile.Phone = user.Phone;
+                    profile.CarNumber = kekName;
+                    profile.Id = j;
+
+                    await db.InsertAsync(profile);
+
+                    worker.Id = j;
+                    worker.StatusId = rand.Next(0, 2);
+                    double latitude = 47.2 + rand.NextDouble();
+                    double longitude = 39.7 + rand.NextDouble();
+
+                    worker.Location = new PostgisPoint(latitude, longitude);
+                    worker.Location.SRID = 4326;
+
+                    await db.InsertAsync(worker);
+
+                    supp.IdWorker = j;
+                    supp.IdCategory = rand.Next(0, 3);
+                    supp.Price = rand.Next(50, 250);
+
+                    await db.InsertAsync(supp);
+                }
             }
         }
     }

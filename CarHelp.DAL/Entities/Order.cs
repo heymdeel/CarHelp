@@ -17,8 +17,8 @@ namespace CarHelp.DAL.Entities
         [Column(@"end_time"), Nullable] public DateTime? EndTime { get; set; } // timestamp (6) without time zone
         [Column(@"category"), NotNull] public int CategoryId { get; set; } // integer
         [Column(@"status"), NotNull] public int StatusId { get; set; } // integer
-        [Column(@"summary"), Nullable] public double? Price { get; set; } // double precision
-        [Column(@"rate"), Nullable] public int? Rate { get; set; } // integer
+        [Column(@"summary"), NotNull] public double Price { get; set; } // double precision
+        [Column(@"rate"), NotNull] public int Rate { get; set; } // integer
 
         #region Associations
 

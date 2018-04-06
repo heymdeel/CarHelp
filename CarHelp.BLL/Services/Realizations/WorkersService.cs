@@ -40,7 +40,7 @@ namespace CarHelp.BLL.Services
 
         public async Task<WorkerSupportedCategories> GetSupportedCategoryAsync(int workerId, int categoryId)
         {
-            return await supportedCategoriesRepo.FirstOrDefaultAsync(c => c.IdCategory == categoryId && c.IdWorker == workerId);
+            return await supportedCategoriesRepo.FirstOrDefaultAsync(c => c.CategoryId == categoryId && c.WorkerId == workerId);
         }
 
         public async Task<bool> WorkerIsOnlineAsync(int workerId)

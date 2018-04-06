@@ -18,6 +18,8 @@ namespace CarHelp.DAL.DTO
 
         public double Price { get; set; }
 
+        public int Rate { get; set; }
+
         public int StatusId { get; set; }
 
         public DateTime BeginingTIme { get; set; }

@@ -27,6 +27,7 @@ namespace CarHelp.BLL.Services
             orderDTO.StatusId = (int)OrdersStatuses.Awaiting;
             orderDTO.ClientId = clientId;
             orderDTO.Price = supportedCategory.Price;
+            orderDTO.Rate = 0;
 
             return await ordersRepository.CreateOrderAsync(orderDTO);
         }

@@ -15,7 +15,7 @@ namespace CarHelp.DAL.Repositories
         public async Task<Order> CreateOrderAsync(DALOrderCreateDTO orderData)
         {
             var order = Mapper.Map<Order>(orderData);
-            order.Location = new PostgisPoint(orderData.Latitude, orderData.Longitude);
+            order.Location = new PostgisPoint(orderData.Longitude, orderData.Latitude);
             order.Location.SRID = 4326;
 
             using (var db = new L2DBContext())

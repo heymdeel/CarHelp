@@ -12,7 +12,7 @@ namespace CarHelp.DAL.Entities
         [Column(@"phone"), NotNull] public string Phone { get; set; } // character varying(11)
         [Column(@"roles"), NotNull] public string[] Roles { get; set; } // ARRAY
         [Column(@"date_of_registration"), NotNull] public DateTime DateOfRegistration { get; set; } // timestamp (6) without time zone
-        [Column(@"refresh_token"), NotNull] public string RefreshToken { get; set; } // text
+        [Column(@"refresh_token"), Nullable] public string RefreshToken { get; set; } // text
 
         #region Associations
 

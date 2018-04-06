@@ -28,10 +28,10 @@ namespace CarHelp.DAL.Repositories
 
                     // TODO: add pagination?
                     string sql = @"select workers_price.id, price, name, surname, phone, car_number, 
-                                   ST_Distance_Sphere(location, ST_SetSRID(ST_Point(@latitude, @longitude), 4326)) as distance from 
+                                   ST_Distance_Sphere(location, ST_Point(@longitude, @latitude)) as distance from 
 	                                    (select id, price, location from 
 		                                    (select id, location from workers 
-		                                    where ST_Distance_Sphere(location, ST_SetSRID(ST_Point(@latitude, @longitude), 4326)) <= @radius and status = 1) as closest_workers 
+		                                    where ST_DWithin(location::geography, ST_Point(@longitude, @latitude)::geography, @radius) and status = 1) as closest_workers 
 	                                    inner join worker_supported_categories on closest_workers.id = id_worker where id_category = @category limit 20) as workers_price
                                    inner join user_profiles on workers_price.id = user_profiles.id
                                    order by distance asc";
@@ -122,16 +122,16 @@ namespace CarHelp.DAL.Repositories
 
                     worker.Id = j;
                     worker.StatusId = rand.Next(0, 2);
-                    double latitude = 47.2 + rand.NextDouble();
-                    double longitude = 39.7 + rand.NextDouble();
+                    double latitude = 47.2 + rand.NextDouble() % 0.1;
+                    double longitude = 39.7 + rand.NextDouble() % 0.1;
 
-                    worker.Location = new PostgisPoint(latitude, longitude);
+                    worker.Location = new PostgisPoint(longitude, latitude);
                     worker.Location.SRID = 4326;
 
                     await db.InsertAsync(worker);
 
-                    supp.IdWorker = j;
-                    supp.IdCategory = rand.Next(0, 3);
+                    supp.WorkerId = j;
+                    supp.CategoryId = rand.Next(0, 3);
                     supp.Price = rand.Next(50, 250);
 
                     await db.InsertAsync(supp);

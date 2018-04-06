@@ -34,7 +34,7 @@ namespace CarHelp.Controllers
         [HttpGet("closest")]
         [Authorize(Roles = "client")]
         [ProducesResponseType(typeof(ClosestWorkersVM), 200)]
-        public async Task<IActionResult> GetClosestWorkers([FromQuery]double latitude, [FromQuery]double longitude, [FromQuery(Name = "category")]int categoryId)
+        public async Task<IActionResult> GetClosestWorkers([FromQuery]double longitude, [FromQuery]double latitude, [FromQuery(Name = "category")]int categoryId)
         {
             var clientData = new ClientCallHelpDTO
             {

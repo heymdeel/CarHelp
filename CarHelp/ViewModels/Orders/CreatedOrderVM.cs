@@ -15,6 +15,6 @@ namespace CarHelp.ViewModels
         public UserProfileVM Worker { get; set; }
 
         [JsonProperty("price")]
-        public double? Price { get;  set; }
+        public double Price { get;  set; }
     }
 }

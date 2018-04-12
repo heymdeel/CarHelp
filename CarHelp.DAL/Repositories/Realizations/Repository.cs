@@ -1,4 +1,5 @@
 ﻿using LinqToDB;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,26 +9,41 @@ using System.Threading.Tasks;
 
 namespace CarHelp.DAL.Repositories
 {
-    public class L2DBRepository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
+        protected readonly string connectionString;
+
+        public Repository(IOptions<ConnectionOptions> options)
+        {
+            this.connectionString = options.Value.ConnectionString;
+        }
+
         public IQueryable<T> GetQueryable()
         {
-            var db = new L2DBContext();
+            var db = new DataContext(connectionString);
 
             return db.GetTable<T>().AsQueryable();
         }
 
-        public async Task CreateAsync(T item)
+        public async Task InsertAsync(T item)
         {
-            using (var db = new L2DBContext())
+            using (var db = new DataContext(connectionString))
             {
                 await db.InsertAsync(item);
             }
         }
 
+        public async Task<int> InsertWithIdAsync(T item)
+        {
+            using (var db = new DataContext(connectionString))
+            {
+                return await db.InsertWithInt32IdentityAsync(item);
+            }
+        }
+
         public async Task RemoveAsync(T item)
         {
-            using (var db = new L2DBContext())
+            using (var db = new DataContext(connectionString))
             {
                 await db.DeleteAsync(item);
             }
@@ -35,15 +51,15 @@ namespace CarHelp.DAL.Repositories
 
         public async Task UpdateAsync(T item)
         {
-            using (var db = new L2DBContext())
+            using (var db = new DataContext(connectionString))
             {
                 await db.UpdateAsync(item);
             }
         }
 
-        public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> filter = null, Expression<Func<T, T>> selector = null, int? page = null, int? size = null, Expression<Func<T, object>> include = null)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, Expression<Func<T, T>> selector = null, int? page = null, int? size = null, Expression<Func<T, object>> include = null)
         {
-            using (var db = new L2DBContext())
+            using (var db = new DataContext(connectionString))
             {
                 IQueryable<T> query;
 
@@ -77,7 +93,7 @@ namespace CarHelp.DAL.Repositories
 
         public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter, Expression<Func<T, T>> selector = null, Expression<Func<T, object>> include = null)
         {
-            using (var db = new L2DBContext())
+            using (var db = new DataContext(connectionString))
             {
                 IQueryable<T> query;
 

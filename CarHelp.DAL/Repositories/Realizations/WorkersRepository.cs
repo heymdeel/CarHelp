@@ -1,6 +1,7 @@
 ﻿using CarHelp.DAL.Entities;
 using LinqToDB;
 using LinqToDB.SqlQuery;
+using Microsoft.Extensions.Options;
 using Npgsql;
 using NpgsqlTypes;
 using System;
@@ -12,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace CarHelp.DAL.Repositories
 {
-    public class WorkersRepository : L2DBRepository<Worker>, IWorkersRepository
+    public class WorkersRepository : Repository<Worker>, IWorkersRepository
     {
-        public async Task<IEnumerable<(double price, double distance, UserProfile worker)>> GetClosestWorkersAsync(double latitude, double longitude, double radius, int categoryId)
+        public WorkersRepository(IOptions<ConnectionOptions> options) : base(options) { }
+
+        public async Task<IEnumerable<(double price, double distance, UserProfile worker)>> GetClosestWorkersAsync(double longitude, double latitude, double radius, int categoryId)
         {
             var workers = new List<(double price, double distance, UserProfile worker)>();
-            // TODO: move this to configuration or another shared place
-            const string connectionString = "User ID=postgres; Password=359741268; Server=localhost; Port=5432; Database=car_help; Pooling=true;";
 
             using (var conn = new NpgsqlConnection(connectionString))
             {
@@ -26,7 +27,6 @@ namespace CarHelp.DAL.Repositories
                 {
                     await conn.OpenAsync();
 
-                    // TODO: add pagination?
                     string sql = @"select workers_price.id, price, name, surname, phone, car_number, 
                                    ST_Distance_Sphere(location, ST_Point(@longitude, @latitude)) as distance from 
 	                                    (select id, price, location from 
@@ -36,6 +36,8 @@ namespace CarHelp.DAL.Repositories
                                    inner join user_profiles on workers_price.id = user_profiles.id
                                    order by distance asc";
 
+
+                    
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("latitude", latitude);
@@ -64,7 +66,7 @@ namespace CarHelp.DAL.Repositories
                         }
                     }
                 }
-                catch (Exception e)
+                catch (NpgsqlException e)
                 {
                     Console.WriteLine(e.ToString());
                     throw;
@@ -75,67 +77,6 @@ namespace CarHelp.DAL.Repositories
                 }
 
                 return workers;
-            }
-        }
-
-        // TODO: remove this
-        public async Task Test()
-        {
-            var basePhoneNumber = 7000000000;
-
-            string baseName = "user";
-            var rand = new Random();
-
-            string[] roles = { "client", "worker" };
-
-            var user = new User();
-            var profile = new UserProfile();
-            var worker = new Worker();
-            var supp = new WorkerSupportedCategories();
-
-            using (var db = new L2DBContext())
-            {
-                int j = 1;
-                for (var i = basePhoneNumber; j < 100000; i++, j++)
-                {
-                    user.Phone = (basePhoneNumber + j).ToString();
-                    user.Roles = roles;
-                    user.DateOfRegistration = DateTime.Now;
-                    user.Id = j;
-
-                    await db.GetTable<User>()
-                            .Value(u => u.Phone, user.Phone)
-                            .Value(u => u.Roles, user.Roles)
-                            .Value(u => u.DateOfRegistration, user.DateOfRegistration)
-                            .Value(u => u.Id, user.Id)
-                            .InsertAsync();
-
-                    var kekName = baseName + j.ToString();
-
-                    profile.Name = kekName;
-                    profile.Surname = kekName;
-                    profile.Phone = user.Phone;
-                    profile.CarNumber = kekName;
-                    profile.Id = j;
-
-                    await db.InsertAsync(profile);
-
-                    worker.Id = j;
-                    worker.StatusId = rand.Next(0, 2);
-                    double latitude = 47.2 + rand.NextDouble() % 0.1;
-                    double longitude = 39.7 + rand.NextDouble() % 0.1;
-
-                    worker.Location = new PostgisPoint(longitude, latitude);
-                    worker.Location.SRID = 4326;
-
-                    await db.InsertAsync(worker);
-
-                    supp.WorkerId = j;
-                    supp.CategoryId = rand.Next(0, 3);
-                    supp.Price = rand.Next(50, 250);
-
-                    await db.InsertAsync(supp);
-                }
             }
         }
     }

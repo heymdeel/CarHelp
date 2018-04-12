@@ -11,11 +11,12 @@ namespace CarHelp.DAL.Repositories
     {
         IQueryable<T> GetQueryable();
 
-        Task CreateAsync(T item);
+        Task InsertAsync(T item);
+        Task<int> InsertWithIdAsync(T item);
         Task RemoveAsync(T item);
         Task UpdateAsync(T item);
 
         Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter, Expression<Func<T, T>> selector = null, Expression<Func<T, object>> include = null);
-        Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> filter = null, Expression<Func<T, T>> selector = null, int? page = null, int? size = null, Expression<Func<T, object>> include = null);
+        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, Expression<Func<T, T>> selector = null, int? page = null, int? size = null, Expression<Func<T, object>> include = null);
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 namespace CarHelp.DAL.Entities
 {
     [Table(Schema = "public", Name = "users")]
-    public partial class User
+    public class User
     {
         [Column(@"id"), PrimaryKey, Identity] public int Id { get; set; } // integer
         [Column(@"phone"), NotNull] public string Phone { get; set; } // character varying(11)

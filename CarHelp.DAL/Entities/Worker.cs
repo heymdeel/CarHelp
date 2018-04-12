@@ -7,7 +7,7 @@ using System.Text;
 namespace CarHelp.DAL.Entities
 {
     [Table(Schema = "public", Name = "workers")]
-    public partial class Worker
+    public class Worker
     {
         [Column(@"id"), PrimaryKey, NotNull] public int Id { get; set; } // integer
         [Column(@"location"), NotNull] public PostgisGeometry Location { get; set; } // character varying

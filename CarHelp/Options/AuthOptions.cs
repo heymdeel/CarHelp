@@ -7,22 +7,21 @@ using System.Threading.Tasks;
 
 namespace CarHelp.Options
 {
-    // TODO: store it in configuration file
-    internal class AuthOptions
+    public class AuthOptions
     {
-        public const string ISSUER = "CarHelpServer";
+        public string Issuer { get; set; }
 
-        public const string ACCESS_AUDIENCE = "CarHelpClient";
-        public const string REFRESH_AUDIENCE = "CarHelpRefreshToken";
-        const string KEY = "token_secret_key_fhsy23#4&sd*fd33";
+        public string AccessAudience { get; set; }
+        public string RefreshAudience { get; set; }
+        public string Key { get; set; }
 
         // TODO: Change access lifetime to 15 minutes
-        public const int REFRESH_LIFETIME = 180 * 24 * 60;
-        public const int ACCESS_LIFETIME = 180 * 24 * 60;
+        public static readonly int REFRESH_LIFETIME = 180 * 24 * 60;
+        public static readonly int ACCESS_LIFETIME = 180 * 24 * 60;
 
-        public static SymmetricSecurityKey GetSymmetricSecurityKey()
+        public SymmetricSecurityKey GetSymmetricSecurityKey()
         {
-            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));
+            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Key));
         }
     }
 

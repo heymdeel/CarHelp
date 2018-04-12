@@ -6,7 +6,7 @@ using System.Text;
 namespace CarHelp.DAL.Entities
 {
     [Table(Schema = "public", Name = "worker_supported_categories")]
-    public partial class WorkerSupportedCategories
+    public class WorkerSupportedCategories
     {
         [Column(@"id_worker"), PrimaryKey(1), NotNull] public int WorkerId { get; set; } // integer
         [Column(@"id_category"), PrimaryKey(2), NotNull] public int CategoryId { get; set; } // integer

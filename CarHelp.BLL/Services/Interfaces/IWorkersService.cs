@@ -12,7 +12,5 @@ namespace CarHelp.BLL.Services
         Task<IEnumerable<(double price, double distance, UserProfile worker)>> GetClosestWorkersAsync(ClientCallHelpDTO clientData);
         Task<WorkerSupportedCategories> GetSupportedCategoryAsync(int workerId, int categoryId);
         Task<bool> WorkerIsOnlineAsync(int workerId);
-
-        Task Test();
     }
 }

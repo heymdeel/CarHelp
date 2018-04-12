@@ -7,7 +7,7 @@ using NpgsqlTypes;
 namespace CarHelp.DAL.Entities
 {
     [Table(Schema = "public", Name = "orders")]
-    public partial class Order
+    public class Order
     {
         [Column(@"id"), PrimaryKey, Identity] public int Id { get; set; } // integer
         [Column(@"client"), NotNull] public int ClientId { get; set; } // integer

@@ -23,7 +23,7 @@ namespace CarHelp.BLL.Services
 
         public async Task<IEnumerable<(double price, double distance, UserProfile worker)>> GetClosestWorkersAsync(ClientCallHelpDTO clientData)
         {
-            var workers = await workersRepository.GetClosestWorkersAsync(clientData.Latitude, clientData.Longitude, 5000, clientData.CategoryId);
+            var workers = await workersRepository.GetClosestWorkersAsync(clientData.Longitude, clientData.Latitude, 5000, clientData.CategoryId);
 
             if (workers.Count() == 0)
             {
@@ -31,11 +31,6 @@ namespace CarHelp.BLL.Services
             }
 
             return workers;
-        }
-
-        public async Task Test()
-        {
-            await workersRepository.Test();
         }
 
         public async Task<WorkerSupportedCategories> GetSupportedCategoryAsync(int workerId, int categoryId)

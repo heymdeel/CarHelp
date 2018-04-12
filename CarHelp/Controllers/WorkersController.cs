@@ -25,7 +25,7 @@ namespace CarHelp.Controllers
             this.ordersService = ordersService;
         }
 
-        // GET: api/workers/closest?latitude&longitude&category
+        // GET: api/workers/closest?longitude&latitude&category
         /// <summary> Get list of workers in user's radius which can perform order </summary>
         /// <response code="200"> list of workers with distances and prices </response>
         /// <response code="400"> errors in model validation or wrong order category</response>
@@ -38,8 +38,8 @@ namespace CarHelp.Controllers
         {
             var clientData = new ClientCallHelpDTO
             {
-                Latitude = latitude,
                 Longitude = longitude,
+                Latitude = latitude,
                 CategoryId = categoryId
             };
 
@@ -62,14 +62,6 @@ namespace CarHelp.Controllers
             var workersVM = Mapper.Map<IEnumerable<ClosestWorkersVM>>(workers);
 
             return Ok(workersVM);
-        }
-
-        [HttpGet("test")]
-        public async Task<IActionResult> Test()
-        {
-            await workersService.Test();
-
-            return Ok();
         }
     }
 }

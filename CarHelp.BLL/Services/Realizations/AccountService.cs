@@ -46,13 +46,13 @@ namespace CarHelp.BLL.Services
                 Roles = new string[] { "client", "worker" }
             };
 
-            await usersRepository.CreateAsync(user);
-            User createdUser = await usersRepository.FirstOrDefaultAsync(filter: u => u.Phone == userData.Phone);
+            int userId = await usersRepository.InsertWithIdAsync(user);
+            User createdUser = await usersRepository.FirstOrDefaultAsync(filter: u => u.Id == userId);
 
             var userProfile = Mapper.Map<UserProfile>(userData);
             userProfile.Id = createdUser.Id;
 
-            await profilesRepository.CreateAsync(userProfile);
+            await profilesRepository.InsertAsync(userProfile);
 
             return createdUser;
         }

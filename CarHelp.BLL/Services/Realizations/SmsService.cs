@@ -40,7 +40,7 @@ namespace CarHelp.BLL.Services
 
             if (sms == null)
             {
-                await smsRepository.CreateAsync(new SmsCode { Phone = phone, Code = code, TimeStamp = DateTime.Now });
+                await smsRepository.InsertAsync(new SmsCode { Phone = phone, Code = code, TimeStamp = DateTime.Now });
             }
             else
             {

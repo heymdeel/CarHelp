@@ -12,6 +12,7 @@ using CarHelp.Options;
 using CarHelp.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CarHelp.Controllers
@@ -22,9 +23,11 @@ namespace CarHelp.Controllers
     {
         private readonly IAccountService accountService;
         private readonly ISmsService smsService;
+        private readonly AuthOptions authOptions;
 
-        public AuthController(IAccountService accountService, ISmsService smsService)
+        public AuthController(IAccountService accountService, ISmsService smsService, IOptions<AuthOptions> options)
         {
+            this.authOptions = options.Value;
             this.accountService = accountService;
             this.smsService = smsService;
         }
@@ -163,14 +166,15 @@ namespace CarHelp.Controllers
         
         private string GenerateToken(ClaimsIdentity identity, TokenType tokenType)
         {
-            // TODO: change security algorithm
+            Console.WriteLine(authOptions.Key);
+            
             var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: tokenType == TokenType.Refresh ? AuthOptions.REFRESH_AUDIENCE : AuthOptions.ACCESS_AUDIENCE,
+                    issuer: authOptions.Issuer,
+                    audience: tokenType == TokenType.Refresh ? authOptions.RefreshAudience : authOptions.AccessAudience,
                     notBefore: DateTime.Now,
                     claims: identity.Claims,
                     expires: DateTime.Now.AddMinutes(tokenType == TokenType.Refresh ? AuthOptions.REFRESH_LIFETIME : AuthOptions.ACCESS_LIFETIME),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                    signingCredentials: new SigningCredentials(authOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
@@ -196,14 +200,14 @@ namespace CarHelp.Controllers
             var validationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
-                ValidIssuer = AuthOptions.ISSUER,
+                ValidIssuer = authOptions.Issuer,
 
                 ValidateAudience = true,
-                ValidAudience = AuthOptions.REFRESH_AUDIENCE,
+                ValidAudience = authOptions.RefreshAudience,
 
                 ValidateLifetime = true,
 
-                IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                IssuerSigningKey = authOptions.GetSymmetricSecurityKey(),
                 ValidateIssuerSigningKey = true,
             };
 

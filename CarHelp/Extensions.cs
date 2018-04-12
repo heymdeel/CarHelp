@@ -1,5 +1,6 @@
 ﻿using CarHelp.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -12,8 +13,10 @@ namespace CarHelp
 {
     internal static class Extensions
     {
-        public static IServiceCollection AddTokenAuthorization(this IServiceCollection services)
+        public static IServiceCollection AddTokenAuthorization(this IServiceCollection services, IConfiguration configuration)
         {
+            var authOptions = configuration.GetSection("Authentication").GetSection("JWTBearer").Get<AuthOptions>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {
@@ -21,14 +24,14 @@ namespace CarHelp
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
                             ValidateIssuer = true,
-                            ValidIssuer = AuthOptions.ISSUER,
+                            ValidIssuer = authOptions.Issuer,
 
                             ValidateAudience = true,
-                            ValidAudience = AuthOptions.ACCESS_AUDIENCE,
+                            ValidAudience = authOptions.AccessAudience,
 
                             ValidateLifetime = true,
 
-                            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                            IssuerSigningKey = authOptions.GetSymmetricSecurityKey(),
                             ValidateIssuerSigningKey = true,
                         };
                     });

@@ -5,11 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using CarHelp.BLL.Services;
+using CarHelp.DAL;
 using CarHelp.DAL.Repositories;
 using CarHelp.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
@@ -18,23 +21,38 @@ namespace CarHelp
 {   
     public class Startup
     {
+        public IConfiguration Configuration { get; set; }
+
+        public Startup(IConfiguration config)
+        {
+            this.Configuration = config;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IAccountService, AccountService>();
-            services.AddTransient<ISmsService, SmsService>();
-            
-            services.AddTransient(typeof(IRepository<>), typeof(L2DBRepository<>));
+            // Configuration
+            services.AddOptions();
+            services.Configure<ConnectionOptions>(Configuration.GetSection("ConnectionStrings"));
+            services.Configure<AuthOptions>(Configuration.GetSection("Authentication").GetSection("JWTBearer"));
 
-            services.AddTransient<IWorkersService, WorkersService>();
-            services.AddTransient<IOrdersService, OrdersService>();
+            // Repositories
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
             services.AddTransient<IWorkersRepository, WorkersRepository>();
             services.AddTransient<IOrdersRepository, OrdersRepository>();
 
-            services.AddTokenAuthorization();
+            // Services
+            services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<ISmsService, SmsService>();
+            services.AddTransient<IWorkersService, WorkersService>();
+            services.AddTransient<IOrdersService, OrdersService>();
+
+            // Authhorization
+            services.AddTokenAuthorization(Configuration);
 
             services.AddMvc();
             services.AddAutoMapper();
-
+            
+            // Swagger
             services.AddSwaggerGen(swagger =>
             {
                 swagger.SwaggerDoc("v1", new Info { Title = "CarHelp API", Version = "v1" });

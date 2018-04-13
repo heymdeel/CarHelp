@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarHelp", "CarHelp\CarHelp.csproj", "{34BAED4C-B9A9-49BA-A00A-F8AE6FF883C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarHelp", "src\CarHelp\CarHelp.csproj", "{34BAED4C-B9A9-49BA-A00A-F8AE6FF883C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarHelp.BLL", "CarHelp.BLL\CarHelp.BLL.csproj", "{02EDC669-2A54-4C15-ACF7-A925C38B3DD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarHelp.ApplicationLayer", "src\CarHelp.ApplicationLayer\CarHelp.ApplicationLayer.csproj", "{02EDC669-2A54-4C15-ACF7-A925C38B3DD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarHelp.DAL", "CarHelp.DAL\CarHelp.DAL.csproj", "{57D64894-3A75-44FA-ADC0-2DD0AEA8A506}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarHelp.DAL", "src\CarHelp.DAL\CarHelp.DAL.csproj", "{57D64894-3A75-44FA-ADC0-2DD0AEA8A506}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarHelp.Tests", "tests\CarHelp.Tests\CarHelp.Tests.csproj", "{0E11B28C-16CC-4C2C-AE8A-A0E273B928A2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FBA786D0-27F1-4FFC-A545-2AC2F834508D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +31,16 @@ Global
 		{57D64894-3A75-44FA-ADC0-2DD0AEA8A506}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57D64894-3A75-44FA-ADC0-2DD0AEA8A506}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57D64894-3A75-44FA-ADC0-2DD0AEA8A506}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E11B28C-16CC-4C2C-AE8A-A0E273B928A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E11B28C-16CC-4C2C-AE8A-A0E273B928A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E11B28C-16CC-4C2C-AE8A-A0E273B928A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E11B28C-16CC-4C2C-AE8A-A0E273B928A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0E11B28C-16CC-4C2C-AE8A-A0E273B928A2} = {FBA786D0-27F1-4FFC-A545-2AC2F834508D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4874CFC1-282B-4CE9-AADA-63B71A299C9C}

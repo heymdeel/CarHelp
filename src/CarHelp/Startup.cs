@@ -53,12 +53,12 @@ namespace CarHelp
             services.AddAutoMapper();
             
             // Swagger
-            services.AddSwaggerGen(swagger =>
+            services.AddSwaggerGen(options =>
             {
-                swagger.SwaggerDoc("v1", new Info { Title = "CarHelp API", Version = "v1" });
-                swagger.IncludeXmlComments(Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "CarHelp.xml"));
+                options.SwaggerDoc("v1", new Info { Title = "CarHelp API", Version = "v1" });
+                options.IncludeXmlComments(Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "CarHelp.xml"));
 
-                swagger.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
+                options.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
             });
         }
 

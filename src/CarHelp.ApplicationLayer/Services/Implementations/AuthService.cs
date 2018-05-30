@@ -40,7 +40,7 @@ namespace CarHelp.AppLayer.Services
                 throw new BadInputException("code is invalid");
             }
 
-            if (await usersRepository.FirstOrDefaultAsync(filter: u => u.Phone == userData.Phone) != null)
+            if (await usersRepository.FirstOrDefaultAsync(u => u.Phone == userData.Phone) != null)
             {
                 throw new BadInputException("user already exists");
             }
@@ -65,7 +65,7 @@ namespace CarHelp.AppLayer.Services
                 throw new BadInputException("invalid code");
             }
 
-            var user = await usersRepository.FirstOrDefaultAsync(filter: u => u.Phone == userData.Phone);
+            var user = await usersRepository.FirstOrDefaultAsync(u => u.Phone == userData.Phone);
             if (user == null)
             {
                 throw new BadInputException("user was not found");
@@ -87,25 +87,11 @@ namespace CarHelp.AppLayer.Services
             return (refreshToken, accessToken);
         }
 
-        public async Task InvalidateTokenAsync(string refreshToken)
-        {
-            int userId = GetUserIdFromToken(refreshToken);
-
-            var user = await usersRepository.FirstOrDefaultAsync(filter: u => u.Id == userId && u.RefreshToken == refreshToken);
-            if (user == null || !TokenIsValid(refreshToken)) // bad token format or token wasn't found in storage
-            {
-                throw new BadInputException("token is invalid");
-            }
-
-            user.RefreshToken = String.Empty;
-            await usersRepository.UpdateAsync(user);
-        }
-
         public async Task<((string refresh, string access), User user)> RefreshTokenAsync(string refreshToken)
         {
             int userId = GetUserIdFromToken(refreshToken);
 
-            var user = await usersRepository.FirstOrDefaultAsync(filter: u => u.Id == userId && u.RefreshToken == refreshToken);
+            var user = await usersRepository.FirstOrDefaultAsync(u => u.Id == userId && u.RefreshToken == refreshToken);
             if (user == null || !TokenIsValid(refreshToken)) // bad token format or token wasn't found in storage
             {
                 throw new BadInputException("token is invalid");
@@ -114,6 +100,20 @@ namespace CarHelp.AppLayer.Services
             var tokens = await GenerateAndStoreTokensAsync(user);
 
             return (tokens, user);
+        }
+
+        public async Task InvalidateTokenAsync(string refreshToken)
+        {
+            int userId = GetUserIdFromToken(refreshToken);
+
+            var user = await usersRepository.FirstOrDefaultAsync(u => u.Id == userId && u.RefreshToken == refreshToken);
+            if (user == null || !TokenIsValid(refreshToken)) // bad token format or token wasn't found in storage
+            {
+                throw new BadInputException("token is invalid");
+            }
+
+            user.RefreshToken = String.Empty;
+            await usersRepository.UpdateAsync(user);
         }
 
         private ClaimsIdentity GetIdentity(User user)

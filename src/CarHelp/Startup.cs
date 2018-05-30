@@ -44,7 +44,6 @@ namespace CarHelp
 
             // Services
             services.AddTransient<IAuthService, AuthService>();
-            services.AddTransient<IWorkersService, WorkersService>();
             services.AddTransient<IOrdersService, OrdersService>();
             services.AddScoped<ISmsService, SmsService>();
 

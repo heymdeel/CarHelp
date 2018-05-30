@@ -14,7 +14,7 @@ namespace CarHelp.DAL.Repositories
     public class OrdersRepository : Repository<Order>, IOrdersRepository
     {
         public OrdersRepository(IOptions<ConnectionOptions> options) : base(options) { }
-     
+
         public async Task<Order> InsertOrderAsync(DALOrderCreateDTO orderData)
         {
             var order = Mapper.Map<Order>(orderData);
@@ -23,7 +23,7 @@ namespace CarHelp.DAL.Repositories
                 SRID = 4326
             };
 
-            using (var db = new DataContext(connectionString))
+            using (var db = new DbContext(connectionString))
             {
                 int orderId = await db.InsertWithInt32IdentityAsync(order);
 

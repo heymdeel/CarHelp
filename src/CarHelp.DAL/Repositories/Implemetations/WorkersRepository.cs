@@ -19,9 +19,9 @@ namespace CarHelp.DAL.Repositories
     {
         public WorkersRepository(IOptions<ConnectionOptions> options) : base(options) { }
 
-        public async Task<IEnumerable<ClosestWorkerInfoDTO>> GetClosestWorkersAsync(double longitude, double latitude, double radius, int categoryId)
+        public async Task<IEnumerable<ClosestWorkerkDTO>> GetClosestWorkersAsync(double longitude, double latitude, double radius, int categoryId)
         {
-            using (var db = new DataContext(connectionString))
+            using (var db = new DbContext(connectionString))
             {
                 string sql = @"select workers_price.id, price, name, surname, phone, car_number, 
                                    ST_Distance_Sphere(location, ST_Point(@longitude, @latitude)) as distance from 
@@ -40,7 +40,7 @@ namespace CarHelp.DAL.Repositories
                     new DataParameter("category", categoryId),
                 };
 
-                return await db.QueryToListAsync<ClosestWorkerInfoDTO>(sql, parameters);
+                return await db.QueryToListAsync<ClosestWorkerkDTO>(sql, parameters);
             }
         }
     }

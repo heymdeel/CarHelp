@@ -20,14 +20,14 @@ namespace CarHelp.DAL.Repositories
 
         public IQueryable<T> GetQueryable()
         {
-            var db = new DataContext(connectionString);
+            var db = new DbContext(connectionString);
 
             return db.GetTable<T>().AsQueryable();
         }
 
         public async Task InsertAsync(T item)
         {
-            using (var db = new DataContext(connectionString))
+            using (var db = new DbContext(connectionString))
             {
                 await db.InsertAsync(item);
             }
@@ -35,7 +35,7 @@ namespace CarHelp.DAL.Repositories
 
         public async Task<int> InsertWithIdAsync(T item)
         {
-            using (var db = new DataContext(connectionString))
+            using (var db = new DbContext(connectionString))
             {
                 return await db.InsertWithInt32IdentityAsync(item);
             }
@@ -43,7 +43,7 @@ namespace CarHelp.DAL.Repositories
 
         public async Task DeleteAsync(T item)
         {
-            using (var db = new DataContext(connectionString))
+            using (var db = new DbContext(connectionString))
             {
                 await db.DeleteAsync(item);
             }
@@ -51,7 +51,7 @@ namespace CarHelp.DAL.Repositories
 
         public async Task UpdateAsync(T item)
         {
-            using (var db = new DataContext(connectionString))
+            using (var db = new DbContext(connectionString))
             {
                 await db.UpdateAsync(item);
             }
@@ -59,7 +59,7 @@ namespace CarHelp.DAL.Repositories
 
         public async Task<IEnumerable<T>> AllAsync(Expression<Func<T, bool>> filter = null, Expression<Func<T, T>> selector = null, int? limit = null, int? offset = null, Expression<Func<T, object>> include = null)
         {
-            using (var db = new DataContext(connectionString))
+            using (var db = new DbContext(connectionString))
             {
                 IQueryable<T> query;
 
@@ -93,7 +93,7 @@ namespace CarHelp.DAL.Repositories
 
         public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter, Expression<Func<T, T>> selector = null, Expression<Func<T, object>> include = null)
         {
-            using (var db = new DataContext(connectionString))
+            using (var db = new DbContext(connectionString))
             {
                 IQueryable<T> query;
 

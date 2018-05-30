@@ -14,7 +14,7 @@ namespace CarHelp.DAL
         public string ConnectionString { get; set; }
     }
 
-    internal partial class DataContext : DataConnection
+    internal partial class DbContext : DataConnection
     {
         public ITable<SmsCode> SmsCodes { get => GetTable<SmsCode>(); }
         public ITable<Order> Orders { get => GetTable<Order>(); }
@@ -26,7 +26,7 @@ namespace CarHelp.DAL
         public ITable<WorkerStatus> WorkersStatus { get => GetTable<WorkerStatus>(); }
         public ITable<WorkerSupportedCategories> WorkerSupportedCategories { get => GetTable<WorkerSupportedCategories>(); }
 
-        static DataContext()
+        static DbContext()
         {
             TurnTraceSwitchOn();
             WriteTraceLine = (s1, s2) =>
@@ -35,7 +35,7 @@ namespace CarHelp.DAL
             };
         }
 
-        public DataContext(string connectionString): base(new PostgreSQLDataProvider(), connectionString) {}
+        public DbContext(string connectionString): base(new PostgreSQLDataProvider(), connectionString) {}
     }
 
 }

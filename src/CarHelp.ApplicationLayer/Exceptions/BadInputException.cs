@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CarHelp.AppLayer
 {
-    public class BadInputException : AppException
+    public class BadInputException : AppLayerException
     {
         public BadInputException(string message) : base(message) { }
     }

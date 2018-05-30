@@ -18,14 +18,14 @@ namespace CarHelp.AppLayer.Services
             this.smsRepository = smsRepository;
         }
 
-        public bool PhoneIsValid(string phone) => Regex.IsMatch(phone, "^[7][0-9]{10}$");
+        public bool PhoneNumberIsValid(string phone) => Regex.IsMatch(phone, "^[7][0-9]{10}$");
 
         public async Task SendCodeAsync(string phone)
         {
             // TODO: uncomment this
             //int code = rnd.Next(1000, 9999);
             int code = 1111;
-            SmsCode sms = await smsRepository.FirstOrDefaultAsync(filter: s => s.Phone == phone);
+            SmsCode sms = await smsRepository.FirstOrDefaultAsync(s => s.Phone == phone);
 
             if (sms == null)
             {
@@ -43,7 +43,7 @@ namespace CarHelp.AppLayer.Services
 
         public async Task<bool> CodeIsValidAsync(string phone, int code)
         {
-            SmsCode sms = await smsRepository.FirstOrDefaultAsync(filter: s => s.Phone == phone && s.Code == code);
+            SmsCode sms = await smsRepository.FirstOrDefaultAsync(s => s.Phone == phone && s.Code == code);
             if (sms != null)
             {
                 await smsRepository.DeleteAsync(sms);

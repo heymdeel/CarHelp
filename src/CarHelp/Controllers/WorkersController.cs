@@ -16,12 +16,10 @@ namespace CarHelp.Controllers
     [Route("api/workers")]
     public class WorkersController : Controller
     {
-        private readonly IWorkersService workersService;
         private readonly IOrdersService ordersService;
 
-        public WorkersController(IWorkersService workersService, IOrdersService ordersService)
+        public WorkersController(IOrdersService ordersService)
         {
-            this.workersService = workersService;
             this.ordersService = ordersService;
         }
 
@@ -30,7 +28,6 @@ namespace CarHelp.Controllers
         /// <response code="200"> list of workers with distances and prices </response>
         /// <response code="400"> errors in model validation or wrong order category</response>
         /// <response code="401"> Unathorized </response>
-        /// <response code="404"> no workers were found =\ Sorry, mate </response>
         [HttpGet("closest")]
         [Authorize(Roles = "client")]
         [ProducesResponseType(typeof(ClosestWorkersVM), 200)]
@@ -48,17 +45,7 @@ namespace CarHelp.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!ordersService.ValidateOrderCategory(clientData.CategoryId))
-            {
-                return BadRequest("wrong order's category");
-            }
-
-            var workers = await workersService.GetClosestWorkersAsync(clientData);
-            if (workers == null)
-            {
-                return NotFound();
-            }
-            
+            var workers = await ordersService.FindClosestWorkersAsync(clientData);
             var workersVM = Mapper.Map<IEnumerable<ClosestWorkersVM>>(workers);
 
             return Ok(workersVM);

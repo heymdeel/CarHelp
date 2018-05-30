@@ -15,7 +15,7 @@ namespace CarHelp.AppLayer.Models
             CreateMap<SignUpInput, User>();
             CreateMap<ProfileInput, UserProfile>();
 
-            CreateMap<OrderCreateDTO, DALOrderCreateDTO>();
+            CreateMap<CreateOrderInput, DALOrderCreateDTO>();
         }
     }
 }

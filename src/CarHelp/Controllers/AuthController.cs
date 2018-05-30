@@ -19,7 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace CarHelp.Controllers
 {
     [Produces("application/json")]
-    [Route("api/auth")]
+    [Route("api")]
     public class AuthController : Controller
     {
         private readonly IAuthService authService;
@@ -31,14 +31,18 @@ namespace CarHelp.Controllers
             this.smsService = smsService;
         }
 
-        // GET: api/auth/sms_code?phone
+        // GET: api/sms_code?phone
         /// <summary> Request for sending code via sms </summary>
         /// <response code="200"> success </response>
         /// <response code="400"> bad phone format </response>
         [HttpGet("sms_code")]
         public async Task<IActionResult> GetSmsCode([FromQuery]string phone)
         {
-            if (!smsService.PhoneIsValid(phone))
+            if (phone == null)
+            {
+                return Forbid();
+            }
+            if (!smsService.PhoneNumberIsValid(phone))
             {
                 return BadRequest("bad phone format");
             }
@@ -48,7 +52,7 @@ namespace CarHelp.Controllers
             return Ok();
         }
 
-        // POST: api/auth/sing_up
+        // POST: api/sing_up
         /// <summary> Sign up user </summary>
         /// <response code="200"> tokens and user's roles </response>
         /// <response code="400"> invalid code, errors in model validation or user already exists </response>
@@ -69,7 +73,7 @@ namespace CarHelp.Controllers
             return Ok(tokenVM);
         }
 
-        // POST: api/auth/sign_in
+        // POST: api/sign_in
         /// <summary> Sign in user </summary>
         /// <response code="200"> tokens and user's roles </response>
         /// <response code="400"> invalid code, errors in model validation or user was not found </response>
@@ -90,7 +94,7 @@ namespace CarHelp.Controllers
             return Ok(tokenVM);
         }
 
-        // POST: api/auth/token
+        // POST: api/token
         /// <summary> Get new access and refresh token </summary>
         /// <response code="200"> tokens and user's roles </response>
         /// <response code="400"> invalid refresh token or user with this id wasn't found </response>
@@ -105,9 +109,9 @@ namespace CarHelp.Controllers
             return Ok(tokenVM);
         }
 
-        // DELETE: api/auth/token
+        // DELETE: api/token
         /// <summary> Invalidate refresh token </summary>
-        /// <responce code="400"> invalid refresh token </responce>
+        /// <responce code="400"> invalid refresh token or user doen't exist </responce>
         [HttpDelete("token")]
         public async Task<IActionResult> InvalidateToken([FromBody] string refreshToken)
         {

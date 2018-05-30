@@ -1,5 +1,6 @@
 ﻿using CarHelp.AppLayer.Models.DTO;
 using CarHelp.DAL.Entities;
+using CarHelp.DAL.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +10,7 @@ namespace CarHelp.AppLayer.Services
 {
     public interface IOrdersService
     {
-        bool ValidateOrderCategory(int categoryId);
-        Task<Order> CreateOrderAsync(OrderCreateDTO orderData, int clientId, WorkerSupportedCategories supportedCategory);
+        Task<IEnumerable<ClosestWorkerkDTO>> FindClosestWorkersAsync(ClientCallHelpDTO clientData);
+        Task<Order> PlaceOrderAsync(CreateOrderInput orderData, int clientId);
     }
 }

@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,21 +20,34 @@ namespace CarHelp.Tests
 
         public AccountTests()
         {
-            _server = new TestServer(new WebHostBuilder()
-            .UseStartup<Startup>());
+            var projectPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..\..\", "src/CarHelp"));
+
+            var config = new ConfigurationBuilder()
+                .SetBasePath(projectPath)
+                .AddJsonFile("appsettings.json", optional: true)
+                .Build();
+
+            _server = new TestServer(WebHost.CreateDefaultBuilder()
+                .UseConfiguration(config)
+                .UseStartup<Startup>()
+                .UseEnvironment("Development"));
 
             _client = _server.CreateClient();
+            _client.BaseAddress = new Uri("http://localhost:8080/");
         }
 
-        [Fact]
-        public async Task SendSmsCodeBadRequestTest()
+        [Theory]
+        [InlineData("12345")]
+        public async Task SendSmsCodeBadRequestTest(string phone)
         {
-            var builder = new UriBuilder("/api/auth/sms_code");
-            builder.Query = "phone=12313";
+            // Arrange
+            var uri = $"api/sms_code?phone={phone}";
 
-            var response = await _client.GetAsync(builder.Uri);
+            // Act
+            var response = await _client.GetAsync(uri);
 
-            Assert.Equal(response.StatusCode.ToString(), StatusCodes.Status400BadRequest.ToString());
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
     }
 }

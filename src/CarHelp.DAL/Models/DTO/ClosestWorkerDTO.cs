@@ -6,7 +6,7 @@ using LinqToDB.Mapping;
 
 namespace CarHelp.DAL.Models.DTO
 {
-    public class ClosestWorkerInfoDTO
+    public class ClosestWorkerkDTO
     {
         public double Price { get; set; }
 

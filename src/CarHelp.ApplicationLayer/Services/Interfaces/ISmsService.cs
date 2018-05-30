@@ -7,7 +7,7 @@ namespace CarHelp.AppLayer.Services
 {
     public interface ISmsService
     {
-        bool PhoneIsValid(string phone);
+        bool PhoneNumberIsValid(string phone);
         Task<bool> CodeIsValidAsync(string phone, int code);
         Task SendCodeAsync(string phone);
     }

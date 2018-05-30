@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CarHelp.AppLayer.Models.DTO
 {
-    public class OrderCreateDTO
+    public class CreateOrderInput
     {
         [Required, Range(-180, 180)]
         [JsonProperty("longitude")]

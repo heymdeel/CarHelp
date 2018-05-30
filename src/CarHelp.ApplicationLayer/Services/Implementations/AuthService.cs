@@ -45,7 +45,7 @@ namespace CarHelp.AppLayer.Services
                 throw new BadInputException("user already exists");
             }
 
-            // it would better to move this somethig
+            // it would be better to move this somewhere
             var user = Mapper.Map<User>(userData);
             user.Roles = new[] { "client", "worker" };
             user.DateOfRegistration = DateTime.Now;

@@ -1,4 +1,5 @@
-﻿using CarHelp.Options;
+﻿using CarHelp.AppLayer;
+using CarHelp.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

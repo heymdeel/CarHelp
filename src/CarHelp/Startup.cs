@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using CarHelp.AppLayer;
 using CarHelp.AppLayer.Services;
 using CarHelp.DAL;
 using CarHelp.DAL.Repositories;
+using CarHelp.Middlewares;
 using CarHelp.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,10 +43,10 @@ namespace CarHelp
             services.AddTransient<IOrdersRepository, OrdersRepository>();
 
             // Services
-            services.AddTransient<IAccountService, AccountService>();
-            services.AddTransient<ISmsService, SmsService>();
+            services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IWorkersService, WorkersService>();
             services.AddTransient<IOrdersService, OrdersService>();
+            services.AddScoped<ISmsService, SmsService>();
 
             // Authhorization
             services.AddTokenAuthorization(Configuration);
@@ -79,6 +81,7 @@ namespace CarHelp
 
             app.UseAuthentication();
 
+            app.UseMiddleware<AppErrorsMiddleware>();
             app.UseMvc();
         }
     }

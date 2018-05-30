@@ -1,11 +1,9 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace CarHelp.Options
+namespace CarHelp.AppLayer
 {
     public class AuthOptions
     {
@@ -23,11 +21,5 @@ namespace CarHelp.Options
         {
             return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Key));
         }
-    }
-
-    internal enum TokenType
-    {
-        Refresh = 0,
-        Access = 1
     }
 }

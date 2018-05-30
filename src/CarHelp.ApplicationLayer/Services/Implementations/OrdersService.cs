@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CarHelp.AppLayer.Models.BusinessModels;
+using CarHelp.AppLayer.Models;
 using CarHelp.AppLayer.Models.DTO;
 using CarHelp.DAL.DTO;
 using CarHelp.DAL.Entities;
@@ -29,7 +29,7 @@ namespace CarHelp.AppLayer.Services
             orderDTO.Price = supportedCategory.Price;
             orderDTO.Rate = 0;
 
-            return await ordersRepository.CreateOrderAsync(orderDTO);
+            return await ordersRepository.InsertOrderAsync(orderDTO);
         }
 
         public bool ValidateOrderCategory(int categoryId)

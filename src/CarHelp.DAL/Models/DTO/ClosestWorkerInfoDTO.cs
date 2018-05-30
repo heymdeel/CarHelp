@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using LinqToDB.Mapping;
 
 namespace CarHelp.DAL.Models.DTO
 {
@@ -18,7 +19,8 @@ namespace CarHelp.DAL.Models.DTO
         public string Surname { get; set; }
 
         public string Phone { get; set; }
-
+        
+        [Column("car_number")]
         public string CarNumber { get; set; }
     }
 }

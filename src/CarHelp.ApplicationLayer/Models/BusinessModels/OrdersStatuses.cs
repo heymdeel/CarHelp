@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CarHelp.AppLayer.Models.BusinessModels
+namespace CarHelp.AppLayer.Models
 {
     internal enum OrdersStatuses
     {

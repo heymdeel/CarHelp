@@ -18,13 +18,11 @@ namespace CarHelp.Controllers
     {
         private readonly IOrdersService ordersService;
         private readonly IWorkersService workersService;
-        private readonly IAccountService accountService;
 
-        public OrdersController(IOrdersService ordersService, IWorkersService workersService, IAccountService accountService)
+        public OrdersController(IOrdersService ordersService, IWorkersService workersService)
         {
             this.ordersService = ordersService;
             this.workersService = workersService;
-            this.accountService = accountService;
         }
 
         // POST: api/orders
@@ -60,7 +58,7 @@ namespace CarHelp.Controllers
                 return StatusCode(500);
             }
 
-            var workerProfile = await accountService.GetUserProfileAsync(order.WorkerId);
+            object workerProfile = null;//await accountService.GetUserProfileAsync(order.WorkerId);
             var orderVM = Mapper.Map<CreatedOrderVM>(order);
             orderVM.Worker = Mapper.Map<UserProfileVM>(workerProfile);
 

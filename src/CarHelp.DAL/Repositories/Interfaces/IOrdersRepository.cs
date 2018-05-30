@@ -9,6 +9,6 @@ namespace CarHelp.DAL.Repositories
 {
     public interface IOrdersRepository : IRepository<Order>
     {
-        Task<Order> CreateOrderAsync(DALOrderCreateDTO order);
+        Task<Order> InsertOrderAsync(DALOrderCreateDTO order);
     }
 }

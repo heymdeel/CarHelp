@@ -6,15 +6,8 @@ using System.Text;
 
 namespace CarHelp.AppLayer.Models.DTO
 {
-    public class UserSignUpDTO
+    public class ProfileInput
     {
-        [Required, RegularExpression("^[7][0-9]{10}$")]
-        public string Phone { get; set; }
-
-        [Required, Range(1000, 9999)]
-        [JsonProperty("sms_code")]
-        public int SmsCode { get; set; }
-
         [Required, StringLength(15, MinimumLength = 3)]
         public string Name { get; set; }
 

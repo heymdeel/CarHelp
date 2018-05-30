@@ -23,7 +23,7 @@ namespace CarHelp.DAL.Repositories
         {
             using (var db = new DataContext(connectionString))
             {
-                string sql = @"select workers_price.id, price, name, surname, phone, car_number as carnumber, 
+                string sql = @"select workers_price.id, price, name, surname, phone, car_number, 
                                    ST_Distance_Sphere(location, ST_Point(@longitude, @latitude)) as distance from 
 	                                    (select id, price, location from 
 		                                    (select id, location from workers 

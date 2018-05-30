@@ -41,7 +41,7 @@ namespace CarHelp.DAL.Repositories
             }
         }
 
-        public async Task RemoveAsync(T item)
+        public async Task DeleteAsync(T item)
         {
             using (var db = new DataContext(connectionString))
             {
@@ -57,7 +57,7 @@ namespace CarHelp.DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, Expression<Func<T, T>> selector = null, int? page = null, int? size = null, Expression<Func<T, object>> include = null)
+        public async Task<IEnumerable<T>> AllAsync(Expression<Func<T, bool>> filter = null, Expression<Func<T, T>> selector = null, int? limit = null, int? offset = null, Expression<Func<T, object>> include = null)
         {
             using (var db = new DataContext(connectionString))
             {
@@ -82,9 +82,9 @@ namespace CarHelp.DAL.Repositories
                     query = query.Select(selector);
                 }
 
-                if (page != null && size != null)
+                if (limit != null && offset != null)
                 {
-                    query = query.Take((page.Value - 1) * size.Value).Skip(size.Value);
+                    query = query.Skip(offset.Value).Take(limit.Value);
                 }
 
                 return await query.ToListAsync();

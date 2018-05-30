@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CarHelp.AppLayer.Models.DTO
 {
-    public class UserSignInDTO
+    public class SignInInput
     {
         [Required, RegularExpression("^[7][0-9]{10}$")]
         public string Phone { get; set; }

@@ -15,7 +15,7 @@ namespace CarHelp.DAL.Repositories
     {
         public OrdersRepository(IOptions<ConnectionOptions> options) : base(options) { }
      
-        public async Task<Order> CreateOrderAsync(DALOrderCreateDTO orderData)
+        public async Task<Order> InsertOrderAsync(DALOrderCreateDTO orderData)
         {
             var order = Mapper.Map<Order>(orderData);
             order.Location = new PostgisPoint(orderData.Longitude, orderData.Latitude)

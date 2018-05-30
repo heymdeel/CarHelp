@@ -12,7 +12,9 @@ namespace CarHelp.AppLayer.Models
     {
         public MappingProfileAppLayer()
         {
-            CreateMap<UserSignUpDTO, UserProfile>();
+            CreateMap<SignUpInput, User>();
+            CreateMap<ProfileInput, UserProfile>();
+
             CreateMap<OrderCreateDTO, DALOrderCreateDTO>();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using LinqToDB.Mapping;
+using NetTopologySuite.Geometries;
 using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace CarHelp.DAL.Entities
     public class Worker
     {
         [Column(@"id"), PrimaryKey, NotNull] public int Id { get; set; } // integer
-        [Column(@"location"), NotNull] public PostgisGeometry Location { get; set; } // character varying
+        [Column(@"location"), NotNull] public Geometry Location { get; set; } // character varying
         [Column(@"status"), NotNull] public int StatusId { get; set; } // integer
 
         #region Associations

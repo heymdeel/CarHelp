@@ -3,6 +3,7 @@ using CarHelp.DAL.DTO;
 using CarHelp.DAL.Entities;
 using LinqToDB;
 using Microsoft.Extensions.Options;
+using NetTopologySuite.Geometries;
 using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace CarHelp.DAL.Repositories
         public async Task<Order> InsertOrderAsync(DALOrderCreateDTO orderData)
         {
             var order = Mapper.Map<Order>(orderData);
-            order.Location = new PostgisPoint(orderData.Longitude, orderData.Latitude)
+            order.Location = new Point(orderData.Longitude, orderData.Latitude)
             {
                 SRID = 4326
             };

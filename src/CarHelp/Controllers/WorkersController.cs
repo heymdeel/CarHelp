@@ -24,7 +24,7 @@ namespace CarHelp.Controllers
         }
 
         // GET: api/workers/closest?longitude&latitude&category
-        /// <summary> Get list of workers in user's radius which can perform order </summary>
+        /// <summary> Get list of workers in user's radius who can perform order </summary>
         /// <response code="200"> list of workers with distances and prices </response>
         /// <response code="400"> errors in model validation or wrong order category</response>
         /// <response code="401"> Unathorized </response>
@@ -40,7 +40,7 @@ namespace CarHelp.Controllers
                 CategoryId = categoryId
             };
 
-            if (!TryValidateModel(clientData) )
+            if (!TryValidateModel(clientData))
             {
                 return BadRequest(ModelState);
             }

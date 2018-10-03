@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CarHelp.AppLayer.Models
 {
-    internal class MappingProfileAppLayer : Profile
+    public class MappingProfileAppLayer : Profile
     {
         public MappingProfileAppLayer()
         {

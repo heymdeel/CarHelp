@@ -1,14 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="linq2db.Core" Version="1.10.2" />
-    <PackageReference Include="linq2db.PostgreSQL" Version="1.10.0" />
-    <PackageReference Include="Npgsql" Version="3.2.7" />
+    <PackageReference Include="linq2db.PostgreSQL" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
+    <PackageReference Include="Npgsql" Version="4.0.3" />
+    <PackageReference Include="Npgsql.NetTopologySuite" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>

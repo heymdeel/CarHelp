@@ -5,18 +5,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using CarHelp.AppLayer;
+using CarHelp.AppLayer.Models;
 using CarHelp.AppLayer.Services;
 using CarHelp.DAL;
 using CarHelp.DAL.Repositories;
 using CarHelp.Middlewares;
 using CarHelp.Options;
+using CarHelp.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace CarHelp
@@ -51,13 +52,19 @@ namespace CarHelp
             services.AddTokenAuthorization(Configuration);
 
             services.AddMvc();
-            services.AddAutoMapper();
             
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfile(typeof(MappingProfileVM));
+                cfg.AddProfile(typeof(MappingProfileDAL));
+                cfg.AddProfile(typeof(MappingProfileAppLayer));
+            });
+
             // Swagger
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new Info { Title = "CarHelp API", Version = "v1" });
-                options.IncludeXmlComments(Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "CarHelp.xml"));
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "CarHelp.xml"));
 
                 options.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
             });

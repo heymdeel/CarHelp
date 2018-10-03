@@ -38,11 +38,7 @@ namespace CarHelp.Controllers
         [HttpGet("sms_code")]
         public async Task<IActionResult> GetSmsCode([FromQuery]string phone)
         {
-            if (phone == null)
-            {
-                return Forbid();
-            }
-            if (!smsService.PhoneNumberIsValid(phone))
+            if (phone == null || !smsService.PhoneNumberIsValid(phone))
             {
                 return BadRequest("bad phone format");
             }
@@ -111,6 +107,7 @@ namespace CarHelp.Controllers
 
         // DELETE: api/token
         /// <summary> Invalidate refresh token </summary>
+        /// <responce code="204"> Token was invalidated</responce>
         /// <responce code="400"> invalid refresh token or user doen't exist </responce>
         [HttpDelete("token")]
         public async Task<IActionResult> InvalidateToken([FromBody] string refreshToken)

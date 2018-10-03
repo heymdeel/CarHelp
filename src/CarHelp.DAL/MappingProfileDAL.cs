@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CarHelp.DAL
 {
-    internal class MappingProfileDAL : Profile
+    public class MappingProfileDAL : Profile
     {
         public MappingProfileDAL()
         {

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using LinqToDB.Data;
 using LinqToDB.DataProvider.PostgreSQL;
+using Npgsql;
 
 namespace CarHelp.DAL
 {
@@ -28,6 +29,7 @@ namespace CarHelp.DAL
 
         static DbContext()
         {
+            NpgsqlConnection.GlobalTypeMapper.UseNetTopologySuite();
             TurnTraceSwitchOn();
             WriteTraceLine = (s1, s2) =>
             {

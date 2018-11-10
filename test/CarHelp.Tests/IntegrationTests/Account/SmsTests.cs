@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CarHelp.Tests.Account
+namespace CarHelp.Tests.IntegrationTests.Account
 {
     public class SmsTests
     {
@@ -64,6 +64,19 @@ namespace CarHelp.Tests.Account
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task PhoneIsNullReturns400()
+        {
+            // Arrange
+            var uri = $"api/sms_code";
+
+            // Act
+            var response = await _client.GetAsync(uri);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
     }
 }

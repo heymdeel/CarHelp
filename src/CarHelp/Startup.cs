@@ -40,7 +40,6 @@ namespace CarHelp
 
             // Repositories
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
-            services.AddTransient<IWorkersRepository, WorkersRepository>();
             services.AddTransient<IOrdersRepository, OrdersRepository>();
 
             // Services
@@ -53,10 +52,10 @@ namespace CarHelp
 
             services.AddMvc();
             
+            // TODO: replace this with instance API
             Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile(typeof(MappingProfileVM));
-                cfg.AddProfile(typeof(MappingProfileDAL));
                 cfg.AddProfile(typeof(MappingProfileAppLayer));
             });
 
@@ -80,14 +79,13 @@ namespace CarHelp
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarHelp API V1");
-
-                    c.DocExpansion(DocExpansion.None);
                 });
             }
 
             app.UseAuthentication();
 
             app.UseMiddleware<AppErrorsMiddleware>();
+
             app.UseMvc();
         }
     }

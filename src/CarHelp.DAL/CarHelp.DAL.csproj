@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="linq2db.Core" Version="1.10.2" />
-    <PackageReference Include="linq2db.PostgreSQL" Version="2.3.0" />
+    <PackageReference Include="linq2db.PostgreSQL" Version="2.5.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
     <PackageReference Include="Npgsql" Version="4.0.3" />
     <PackageReference Include="Npgsql.NetTopologySuite" Version="1.0.2" />

@@ -12,14 +12,15 @@ namespace CarHelp.DAL.Entities
     {
         [Column(@"id"), PrimaryKey, Identity] public int Id { get; set; } // integer
         [Column(@"client"), NotNull] public int ClientId { get; set; } // integer
-        [Column(@"worker"), NotNull] public int WorkerId { get; set; } // integer
-        [Column(@"location"), NotNull] public Geometry Location { get; set; } // USER-DEFINED
-        [Column(@"begining_time"), NotNull] public DateTime BeginingTime { get; set; } // timestamp (6) without time zone
+        [Column(@"worker"), Nullable] public int? WorkerId { get; set; } // integer
+        [Column(@"location"), NotNull] public Point Location { get; set; } // USER-DEFINED
+        [Column(@"beginning_time"), NotNull] public DateTime BeginningTime { get; set; } // timestamp (6) without time zone
         [Column(@"end_time"), Nullable] public DateTime? EndTime { get; set; } // timestamp (6) without time zone
         [Column(@"category"), NotNull] public int CategoryId { get; set; } // integer
         [Column(@"status"), NotNull] public int StatusId { get; set; } // integer
-        [Column(@"summary"), NotNull] public double Price { get; set; } // double precision
+        [Column(@"client_price"), Nullable] public double ClientPrice { get; set; } // double precision
         [Column(@"rate"), NotNull] public int Rate { get; set; } // integer
+        [Column(@"commentary"), Nullable] public string Commentary { get; set; } // varchar(200)
 
         #region Associations
 

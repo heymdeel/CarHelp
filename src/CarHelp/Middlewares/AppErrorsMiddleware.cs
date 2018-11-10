@@ -1,7 +1,5 @@
 ﻿using CarHelp.AppLayer;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +38,7 @@ namespace CarHelp.Middlewares
                 context.Response.ContentType = "text/plain";
                 context.Response.StatusCode = statusCode;
 
-                // TODO: add custom codes for different types of errrors. For example, x for "user doesn't exist", y for "validation errors"
+                // TODO: add custom codes for different types of errrors. For example, 900 for "user doesn't exist", 901 for "validation errors"
                 await context.Response.WriteAsync(body);
             }
         }

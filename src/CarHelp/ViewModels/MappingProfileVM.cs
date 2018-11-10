@@ -1,11 +1,5 @@
 ﻿using AutoMapper;
-using CarHelp.AppLayer.Models.DTO;
 using CarHelp.DAL.Entities;
-using CarHelp.DAL.Models.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CarHelp.ViewModels
 {
@@ -14,8 +8,6 @@ namespace CarHelp.ViewModels
         public MappingProfileVM()
         {
             CreateMap<UserProfile, UserProfileVM>();
-            CreateMap<ClosestWorkerkDTO, ClosestWorkersVM>()
-                .ForMember(vm => vm.Worker, r => r.MapFrom(cw => cw));
 
             CreateMap<((string refresh, string access) tokens, User user), TokenVM>()
                 .ForMember(vm => vm.RefreshToken, t => t.MapFrom(o => o.tokens.refresh))

@@ -10,11 +10,6 @@ using Npgsql;
 
 namespace CarHelp.DAL
 {
-    public class ConnectionOptions
-    {
-        public string ConnectionString { get; set; }
-    }
-
     internal partial class DbContext : DataConnection
     {
         public ITable<SmsCode> SmsCodes { get => GetTable<SmsCode>(); }
@@ -30,6 +25,8 @@ namespace CarHelp.DAL
         static DbContext()
         {
             NpgsqlConnection.GlobalTypeMapper.UseNetTopologySuite();
+
+            // change this to the normal logging
             TurnTraceSwitchOn();
             WriteTraceLine = (s1, s2) =>
             {

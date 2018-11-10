@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace CarHelp.DAL.Repositories
 {
+    public class ConnectionOptions
+    {
+        public string ConnectionString { get; set; }
+    }
+
     public class Repository<T> : IRepository<T> where T : class
     {
         protected readonly string connectionString;

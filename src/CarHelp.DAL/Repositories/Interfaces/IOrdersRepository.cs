@@ -9,6 +9,6 @@ namespace CarHelp.DAL.Repositories
 {
     public interface IOrdersRepository : IRepository<Order>
     {
-        Task<Order> InsertOrderAsync(DALOrderCreateDTO order);
+        Task<IEnumerable<ClosestOrderDTO>> FindClosestOrdersAsync(DALSearchOrderDTO searchInput);
     }
 }

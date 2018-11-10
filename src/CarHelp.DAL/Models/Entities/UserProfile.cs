@@ -13,6 +13,7 @@ namespace CarHelp.DAL.Entities
         [Column(@"surname"), NotNull] public string Surname { get; set; } // character varying(15)
         [Column(@"phone"), NotNull] public string Phone { get; set; } // character varying(11)
         [Column(@"car_number"), NotNull] public string CarNumber { get; set; } // character varying(15)
+        [Column(@"car_model"), NotNull] public string CarModel { get; set; } // character varying(50)
 
         #region Associations
 

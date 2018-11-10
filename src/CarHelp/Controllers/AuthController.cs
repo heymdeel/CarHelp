@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
-using CarHelp.AppLayer.Models;
 using CarHelp.AppLayer.Models.DTO;
 using CarHelp.AppLayer.Services;
 using CarHelp.DAL.Entities;
-using CarHelp.Options;
 using CarHelp.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 
 namespace CarHelp.Controllers
 {

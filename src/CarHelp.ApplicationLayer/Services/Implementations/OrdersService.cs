@@ -3,8 +3,9 @@ using CarHelp.AppLayer.Models;
 using CarHelp.AppLayer.Models.DTO;
 using CarHelp.DAL.DTO;
 using CarHelp.DAL.Entities;
-using CarHelp.DAL.Models.DTO;
 using CarHelp.DAL.Repositories;
+using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,59 +17,50 @@ namespace CarHelp.AppLayer.Services
     public class OrdersService : IOrdersService
     {
         private readonly IOrdersRepository ordersRepository;
-        private readonly IWorkersRepository workersRepository;
-        private readonly IRepository<WorkerSupportedCategories> categoriesRepo;
 
-        public OrdersService(IOrdersRepository ordersRepository, IWorkersRepository workersRepository, IRepository<WorkerSupportedCategories> categoriesRepo)
+        public OrdersService(IOrdersRepository ordersRepository)
         {
             this.ordersRepository = ordersRepository;
-            this.workersRepository = workersRepository;
-            this.categoriesRepo = categoriesRepo;
         }
 
-        public async Task<IEnumerable<ClosestWorkerkDTO>> FindClosestWorkersAsync(ClientCallHelpDTO clientData)
+        public async Task<IEnumerable<ClosestOrderDTO>> FindClosestOrdersAsync(SearchOrderInput searchInput)
         {
-            if (!CategoryIsValid(clientData.CategoryId))
-            {
-                throw new BadInputException("wrong order's category");
-            }
+            var searchDTO = Mapper.Map<DALSearchOrderDTO>(searchInput);
 
-            return await workersRepository.GetClosestWorkersAsync(clientData.Longitude, clientData.Latitude, 5000, clientData.CategoryId);
+            return await ordersRepository.FindClosestOrdersAsync(searchDTO);
         }
 
         public async Task<Order> PlaceOrderAsync(CreateOrderInput orderInput, int clientId)
         {
-            var supportedCategory = await categoriesRepo.FirstOrDefaultAsync(c => c.WorkerId == orderInput.WorkerId && c.CategoryId == orderInput.CategoryId);       
-            if (supportedCategory == null)
+            if (!CategoryIsValid(orderInput.CategoryId))
             {
-                throw new BadInputException("worker doesn't support this category");
+                throw new BadInputException("category is not supported");
             }
 
-            if (await workersRepository.FirstOrDefaultAsync(w => w.StatusId == (int)WorkersStatuses.Online) == null)
+            if (await ordersRepository.FirstOrDefaultAsync(o => o.ClientId == clientId && o.StatusId < 3) != null)
             {
-                throw new BadInputException("worker is offline");
+                throw new BadInputException("client already has an actual order");
             }
 
-            var orderDTO = CreateOrder(orderInput, clientId, supportedCategory);
+            var order = Mapper.Map<Order>(orderInput);
+            order.ClientId = clientId;
+            order.BeginningTime = DateTime.Now;
+            order.StatusId = (int)OrdersStatuses.Awaiting;
+            order.Rate = 0;
 
-            return await ordersRepository.InsertOrderAsync(orderDTO);
+            order.Location = new Point(new Coordinate(orderInput.Longitude, orderInput.Latitude))
+            {
+                SRID = 4326
+            };
+
+            int orderId = await ordersRepository.InsertWithIdAsync(order);
+
+            return await ordersRepository.FirstOrDefaultAsync(o => o.Id == orderId);
         }
 
         private bool CategoryIsValid(int categoryId)
         {
             return Enum.IsDefined(typeof(OrdersCategories), categoryId);
-        }
-
-        private DALOrderCreateDTO CreateOrder(CreateOrderInput orderData, int clientId, WorkerSupportedCategories category)
-        {
-            var orderDTO = Mapper.Map<DALOrderCreateDTO>(orderData);
-            orderDTO.BeginingTIme = DateTime.Now;
-            orderDTO.StatusId = (int)OrdersStatuses.Awaiting;
-            orderDTO.ClientId = clientId;
-            orderDTO.Price = category.Price;
-            orderDTO.Rate = 0;
-
-            return orderDTO;
         }
     }
 }

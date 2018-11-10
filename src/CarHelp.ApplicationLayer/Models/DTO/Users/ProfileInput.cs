@@ -17,5 +17,9 @@ namespace CarHelp.AppLayer.Models.DTO
         [Required, StringLength(15, MinimumLength = 3)]
         [JsonProperty("car_number")]
         public string CarNumber { get; set; }
+
+        [Required, StringLength(50, MinimumLength = 3)]
+        [JsonProperty("car_model")]
+        public string CarModel { get; set; }
     }
 }

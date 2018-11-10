@@ -10,11 +10,5 @@ namespace CarHelp.ViewModels
     {
         [JsonProperty("order_id")]
         public int Id { get; set; }
-
-        [JsonProperty("worker")]
-        public UserProfileVM Worker { get; set; }
-
-        [JsonProperty("price")]
-        public double Price { get;  set; }
     }
 }

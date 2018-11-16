@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CarHelp
 {
-    internal static class Extensions
+    public static class Extensions
     {
         public static IServiceCollection AddTokenAuthorization(this IServiceCollection services, IConfiguration configuration)
         {

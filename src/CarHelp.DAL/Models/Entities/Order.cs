@@ -36,6 +36,9 @@ namespace CarHelp.DAL.Entities
         [Association(ThisKey = "WorkerId", OtherKey = "Id", CanBeNull = false, Relationship = Relationship.ManyToOne, KeyName = "orders_worker_fkey", BackReferenceName = "ordersworkerfkeys")]
         public Worker Worker { get; set; }
 
+        [Association(ThisKey = "Id", OtherKey = "OrderId", CanBeNull = true, Relationship = Relationship.OneToMany, IsBackReference = true)]
+        public IEnumerable<RespondedWorkers> RespondedWorkers { get; set; }
+
         #endregion
     }
 }

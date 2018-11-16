@@ -25,8 +25,8 @@ namespace CarHelp.DAL.Entities
         [Association(ThisKey = "Id", OtherKey = "Worker", CanBeNull = true, Relationship = Relationship.OneToMany, IsBackReference = true)]
         public IEnumerable<Order> Orders { get; set; }
 
-        [Association(ThisKey = "Id", OtherKey = "IdWorker", CanBeNull = true, Relationship = Relationship.OneToMany, IsBackReference = true)]
-        public IEnumerable<WorkerSupportedCategories> SupportedCategories { get; set; }
+        [Association(ThisKey = "Id", OtherKey = "WorkerId", CanBeNull = true, Relationship = Relationship.OneToMany, IsBackReference = true)]
+        public IEnumerable<RespondedWorkers> RespondedOrders { get; set; }
 
         #endregion
     }

@@ -20,7 +20,7 @@ namespace CarHelp.DAL
         public ITable<UserProfile> UserProfiles { get => GetTable<UserProfile>(); }
         public ITable<Worker> Workers { get => GetTable<Worker>(); }
         public ITable<WorkerStatus> WorkersStatus { get => GetTable<WorkerStatus>(); }
-        public ITable<WorkerSupportedCategories> WorkerSupportedCategories { get => GetTable<WorkerSupportedCategories>(); }
+        public ITable<RespondedWorkers> RespondedWorkers { get => GetTable<RespondedWorkers>(); }
 
         static DbContext()
         {

@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
+using CarHelp.DAL.DTO;
 using CarHelp.DAL.Entities;
 
 namespace CarHelp.ViewModels
 {
-    internal class MappingProfileVM: Profile
+    public class MappingProfileVM: Profile
     {
         public MappingProfileVM()
         {
@@ -16,6 +17,9 @@ namespace CarHelp.ViewModels
                 .ForMember(vm => vm.Roles, t => t.MapFrom(o => o.user.Roles));
 
             CreateMap<Order, CreatedOrderVM>();
+            CreateMap<ClosestOrderDTO, ClosestOrderVM>();
+            CreateMap<ClientOrderDTO, ClientOrderVM>();
+            CreateMap<OrderLocationDTO, OrderLocationVM>();
         }
     }
 }

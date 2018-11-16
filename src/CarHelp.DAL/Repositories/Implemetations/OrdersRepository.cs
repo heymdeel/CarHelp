@@ -16,7 +16,7 @@ namespace CarHelp.DAL.Repositories
 {
     public class OrdersRepository : Repository<Order>, IOrdersRepository
     {
-        public OrdersRepository(IOptions<ConnectionOptions> options) : base(options) { }
+        public OrdersRepository(IOptions<ConnectionStrings> options) : base(options) { }
 
         public async Task<IEnumerable<ClosestOrderDTO>> FindClosestOrdersAsync(DALSearchOrderDTO searchInput)
         {
@@ -75,9 +75,12 @@ namespace CarHelp.DAL.Repositories
                     Category = result.Order.CategoryId,
                     ClientPrice = result.Order.ClientPrice,
                     Commentary = result.Order.Commentary,
-                    Longitude = result.Order.Location.PgisLongitude(),
-                    Latitude = result.Order.Location.PgisLatitude(),
-                    Distance = result.Order.Location.PgisDistance(workerLocation),
+                    Location = new OrderLocationDTO
+                    {
+                        Longitude = result.Order.Location.PgisLongitude(),
+                        Latitude = result.Order.Location.PgisLatitude(),
+                        Distance = result.Order.Location.PgisDistance(workerLocation)
+                    },
                     Client = new ClientOrderDTO()
                     {
                         Id = result.Client.Id,

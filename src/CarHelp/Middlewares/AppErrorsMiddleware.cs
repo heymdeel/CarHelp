@@ -35,6 +35,12 @@ namespace CarHelp.Middlewares
                     body = ex.Message;
                 }
 
+                if (ex is AccessRefusedException)
+                {
+                    statusCode = (int)HttpStatusCode.Forbidden;
+                    body = ex.Message;
+                }
+
                 context.Response.ContentType = "text/plain";
                 context.Response.StatusCode = statusCode;
 

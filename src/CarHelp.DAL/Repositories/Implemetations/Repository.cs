@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace CarHelp.DAL.Repositories
 {
-    public class ConnectionOptions
+    public class ConnectionStrings
     {
-        public string ConnectionString { get; set; }
+        public string DefaultConnection { get; set; }
     }
 
     public class Repository<T> : IRepository<T> where T : class
     {
         protected readonly string connectionString;
 
-        public Repository(IOptions<ConnectionOptions> options)
+        public Repository(IOptions<ConnectionStrings> options)
         {
-            this.connectionString = options.Value.ConnectionString;
+            this.connectionString = options.Value.DefaultConnection;
         }
 
         public IQueryable<T> GetQueryable()

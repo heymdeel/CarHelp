@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CarHelp.AppLayer.Models;
 using CarHelp.AppLayer.Models.DTO;
 using CarHelp.DAL.Entities;
 using CarHelp.DAL.Repositories;
@@ -21,27 +22,29 @@ namespace CarHelp.AppLayer.Services
         private readonly ISmsService smsService;
         private readonly IRepository<User> usersRepository;
         private readonly IRepository<UserProfile> profilesRepository;
+        private readonly IRepository<Worker> workersRepository;
         private readonly AuthOptions authOptions;
 
-        public AuthService(ISmsService smsService, IRepository<User> usersRepository, IRepository<UserProfile> profilesRepository, IOptions<AuthOptions> authOptions)
+        public AuthService(ISmsService smsService, IRepository<User> usersRepository, IRepository<UserProfile> profilesRepository, IOptions<AuthOptions> authOptions, IRepository<Worker> workersRepository)
         {
             this.smsService = smsService;
             this.usersRepository = usersRepository;
             this.profilesRepository = profilesRepository;
+            this.workersRepository = workersRepository;
 
             this.authOptions = authOptions.Value;
         }
 
         public async Task<User> SignUpUserAsync(SignUpInput userData)
         {
-            if (!await smsService.CodeIsValidAsync(userData.Phone, userData.SmsCode))
-            {
-                throw new BadInputException("code is invalid");
-            }
-
             if (await usersRepository.FirstOrDefaultAsync(u => u.Phone == userData.Phone) != null)
             {
                 throw new BadInputException("user already exists");
+            }
+
+            if (!await smsService.CodeIsValidAsync(userData.Phone, userData.SmsCode))
+            {
+                throw new BadInputException("code is invalid");
             }
 
             // it would be better to move this somewhere
@@ -50,24 +53,27 @@ namespace CarHelp.AppLayer.Services
             user.DateOfRegistration = DateTime.Now;
             user.Profile.Phone = user.Phone;
 
+            var worker = new Worker { StatusId = (int)WorkersStatuses.Offline };
+
             // linq2db can't save both entities in 1 method call
-            user.Profile.Id = user.Id = await usersRepository.InsertWithIdAsync(user);
+            worker.Id = user.Profile.Id = user.Id = await usersRepository.InsertWithIdAsync(user);
             await profilesRepository.InsertAsync(user.Profile);
+            await workersRepository.InsertAsync(worker);
 
             return user;
         }
 
         public async Task<User> SignInUserAsync(SignInInput userData)
         {
-            if (!await smsService.CodeIsValidAsync(userData.Phone, userData.SmsCode))
-            {
-                throw new BadInputException("invalid code");
-            }
-
             var user = await usersRepository.FirstOrDefaultAsync(u => u.Phone == userData.Phone);
             if (user == null)
             {
                 throw new BadInputException("user was not found");
+            }
+
+            if (!await smsService.CodeIsValidAsync(userData.Phone, userData.SmsCode))
+            {
+                throw new BadInputException("invalid code");
             }
 
             return user;

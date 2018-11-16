@@ -10,5 +10,7 @@ namespace CarHelp.AppLayer.Services
     {
         Task<IEnumerable<ClosestOrderDTO>> FindClosestOrdersAsync(SearchOrderInput searchInput);
         Task<Order> PlaceOrderAsync(CreateOrderInput orderData, int clientId);
+        Task RespondToOrderAsync(int orderId, int workerId, WorkerRespondOrderInput workerData);
+        Task AttachWorkerToOrderAsync(int clientId, int orderId, AttachWorkerInfo workerInfo);
     }
 }

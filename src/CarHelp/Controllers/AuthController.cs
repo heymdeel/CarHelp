@@ -100,8 +100,8 @@ namespace CarHelp.Controllers
 
         // DELETE: api/token
         /// <summary> Invalidate refresh token </summary>
-        /// <responce code="204"> Token was invalidated</responce>
-        /// <responce code="400"> invalid refresh token or user doen't exist </responce>
+        /// <response code="204"> Token was invalidated</response>
+        /// <response code="400"> invalid refresh token or user doen't exist </response>
         [HttpDelete("token")]
         public async Task<IActionResult> InvalidateToken([FromBody] string refreshToken)
         {

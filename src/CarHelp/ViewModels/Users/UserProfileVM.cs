@@ -22,5 +22,8 @@ namespace CarHelp.ViewModels
 
         [JsonProperty("car_number")]
         public string CarNumber { get; set; }
+
+        [JsonProperty("car_model")]
+        public string CarModel { get; set; }
     }
 }

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CarHelp.AppLayer.Models.DTO;
 using CarHelp.AppLayer.Services;
-using CarHelp.DAL.DTO;
 using CarHelp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,14 +43,14 @@ namespace CarHelp.Controllers
             return Ok(orderVM);
         }
 
-        // GET: api/orders/active?longitude&latitude&categories&pricefrom&priceto&distance&limit
-        /// <summary> Find closest orders </summary>
+        // GET: api/orders/closest?longitude&latitude&categories&pricefrom&priceto&distance&limit
+        /// <summary> Find closest orders by worker </summary>
         /// <response code="200"> list of orders </response>
         /// <response code="400"> errors in model valdation </response>
         /// <response code="401"> Unathorized </response>
-        [HttpGet("active")]
+        [HttpGet("closest")]
         [Authorize(Roles = "worker")]
-        [ProducesResponseType(typeof(ClosestOrderDTO), 200)]
+        [ProducesResponseType(typeof(ClosestOrderVM), 200)]
         public async Task<IActionResult> GetListOfOrders([FromQuery]SearchOrderInput searchInput)
         {
             if (!ModelState.IsValid)
@@ -59,9 +58,51 @@ namespace CarHelp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await ordersService.FindClosestOrdersAsync(searchInput);
-            
-            return Ok(result);
+            var orders = await ordersService.FindClosestOrdersAsync(searchInput);
+            var ordersVM = Mapper.Map<IEnumerable<ClosestOrderVM>>(orders);
+
+            return Ok(ordersVM);
+        }
+
+        // PUT: api/orders/{id}/responded_workers
+        /// <summary> Respond to an order </summary>
+        /// <response code="200"> ok </response>
+        /// <response code="400"> bad order status, errors in model validation or order was not found </response>
+        /// <response code="401"> unauthorized </response>
+        [HttpPut("{id:int}/responded_workers")]
+        [Authorize(Roles = "worker")]
+        public async Task<IActionResult> RespondToOrder([FromRoute(Name = "id")]int orderId, [FromBody]WorkerRespondOrderInput workerData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            int workerId = User.GetUserId();
+            await ordersService.RespondToOrderAsync(orderId, workerId, workerData);
+
+            return Ok();
+        }
+
+        // PUT: api/orders/{id}/worker
+        /// <summary> Attach worker to an order </summary>
+        /// <response code="200"> worker was succesfully attached to order </response>
+        /// <response code="400"> errors in model validation, absence of order with such id or worker wasn't responding to order </response>
+        /// <response code="401"> unauthorized </response>
+        /// <response code="403"> client has no rights on updating order info </response>
+        [HttpPut("{id:int}/worker")]
+        [Authorize(Roles = "client")]
+        public async Task<IActionResult> AttachWorkerToOrder([FromRoute(Name = "id")] int orderId, [FromBody] AttachWorkerInfo workerData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            int clientId = User.GetUserId();
+            await ordersService.AttachWorkerToOrderAsync(clientId, orderId, workerData);
+
+            return Ok();
         }
     }
 }

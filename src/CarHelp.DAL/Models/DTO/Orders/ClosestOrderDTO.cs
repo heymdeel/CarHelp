@@ -4,6 +4,15 @@ using System.Text;
 
 namespace CarHelp.DAL.DTO
 {
+    public class OrderLocationDTO
+    {
+        public double Longitude { get; set; }
+
+        public double Latitude { get; set; }
+
+        public double Distance { get; set; }
+    }
+
     public class ClientOrderDTO
     {
         public int Id { get; set; }
@@ -23,9 +32,7 @@ namespace CarHelp.DAL.DTO
 
         public ClientOrderDTO Client { get; set; }
 
-        public double Longitude { get; set; }
-
-        public double Latitude { get; set; }
+        public OrderLocationDTO Location { get; set; }
 
         public DateTime BeginningTime { get; set; }
 
@@ -34,7 +41,5 @@ namespace CarHelp.DAL.DTO
         public int Category { get; set; }
 
         public double? ClientPrice { get; set; }
-
-        public double Distance { get; set; }
     }
 }

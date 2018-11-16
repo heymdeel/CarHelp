@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarHelp.DAL", "src\CarHelp.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FBA786D0-27F1-4FFC-A545-2AC2F834508D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarHelp.Tests", "test\CarHelp.Tests\CarHelp.Tests.csproj", "{77885E58-2A83-4F56-AB83-EFA5DDA290D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarHelp.Tests", "test\CarHelp.Tests\CarHelp.Tests.csproj", "{77885E58-2A83-4F56-AB83-EFA5DDA290D5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Respawn.Postgres", "test\Respawn.Postgres\Respawn.Postgres.csproj", "{D14775DF-C8FE-473A-813C-6E55FC794147}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,12 +37,17 @@ Global
 		{77885E58-2A83-4F56-AB83-EFA5DDA290D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77885E58-2A83-4F56-AB83-EFA5DDA290D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77885E58-2A83-4F56-AB83-EFA5DDA290D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D14775DF-C8FE-473A-813C-6E55FC794147}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D14775DF-C8FE-473A-813C-6E55FC794147}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D14775DF-C8FE-473A-813C-6E55FC794147}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D14775DF-C8FE-473A-813C-6E55FC794147}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{77885E58-2A83-4F56-AB83-EFA5DDA290D5} = {FBA786D0-27F1-4FFC-A545-2AC2F834508D}
+		{D14775DF-C8FE-473A-813C-6E55FC794147} = {FBA786D0-27F1-4FFC-A545-2AC2F834508D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4874CFC1-282B-4CE9-AADA-63B71A299C9C}

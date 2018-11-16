@@ -35,7 +35,8 @@ namespace CarHelp
         {
             // Configuration
             services.AddOptions();
-            services.Configure<ConnectionOptions>(Configuration.GetSection("ConnectionStrings"));
+           
+            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<AuthOptions>(Configuration.GetSection("Authentication").GetSection("JWTBearer"));
 
             // Repositories

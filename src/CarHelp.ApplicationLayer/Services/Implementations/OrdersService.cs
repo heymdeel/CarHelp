@@ -17,10 +17,40 @@ namespace CarHelp.AppLayer.Services
     public class OrdersService : IOrdersService
     {
         private readonly IOrdersRepository ordersRepository;
+        private readonly IRepository<RespondedWorkers> respondedWorkersRepository;
 
-        public OrdersService(IOrdersRepository ordersRepository)
+        public OrdersService(IOrdersRepository ordersRepository, IRepository<RespondedWorkers> respondedWorkersRepository)
         {
             this.ordersRepository = ordersRepository;
+            this.respondedWorkersRepository = respondedWorkersRepository;
+        }
+
+        public async Task AttachWorkerToOrderAsync(int clientId, int orderId, AttachWorkerInfo workerInfo)
+        {
+            if (clientId == workerInfo.Id)
+            {
+                throw new BadInputException("can not attach yourself to order");
+            }
+
+            var order = await ordersRepository.FirstOrDefaultAsync(o => o.Id == orderId);
+            if (order == null)
+            {
+                throw new BadInputException("order was not found");
+            }
+
+            if (order.ClientId != clientId)
+            {
+                throw new AccessRefusedException("client has no rights on this order");
+            }
+
+            var respondedWorker = await respondedWorkersRepository.FirstOrDefaultAsync(rw => rw.OrderId == orderId && rw.WorkerId == workerInfo.Id);
+            if (respondedWorker == null)
+            {
+                throw new BadInputException("worker was not responding to this order");
+            }
+
+            order.WorkerId = workerInfo.Id;
+            await ordersRepository.UpdateAsync(order);
         }
 
         public async Task<IEnumerable<ClosestOrderDTO>> FindClosestOrdersAsync(SearchOrderInput searchInput)
@@ -48,7 +78,7 @@ namespace CarHelp.AppLayer.Services
             order.StatusId = (int)OrdersStatuses.Awaiting;
             order.Rate = 0;
 
-            order.Location = new Point(new Coordinate(orderInput.Longitude, orderInput.Latitude))
+            order.Location = new Point(new Coordinate(orderInput.Location.Longitude, orderInput.Location.Latitude))
             {
                 SRID = 4326
             };
@@ -56,6 +86,31 @@ namespace CarHelp.AppLayer.Services
             int orderId = await ordersRepository.InsertWithIdAsync(order);
 
             return await ordersRepository.FirstOrDefaultAsync(o => o.Id == orderId);
+        }
+
+        public async Task RespondToOrderAsync(int orderId, int workerId, WorkerRespondOrderInput workerData)
+        {
+            var order = await ordersRepository.FirstOrDefaultAsync(o => o.Id == orderId);
+            if (order == null)
+            {
+                throw new BadInputException("order with this id was not found");
+            }
+
+            if (order.ClientId == workerId)
+            {
+                throw new BadInputException("can not respond to self placed order");
+            }
+
+            if (order.StatusId != (int)OrdersStatuses.Awaiting)
+            {
+                throw new BadInputException("can't respond to this order, order status is not \"awaiting\"");
+            }
+
+            var respondedWorker = Mapper.Map<RespondedWorkers>(workerData);
+            respondedWorker.OrderId = orderId;
+            respondedWorker.WorkerId = workerId;
+
+            await respondedWorkersRepository.InsertAsync(respondedWorker);
         }
 
         private bool CategoryIsValid(int categoryId)

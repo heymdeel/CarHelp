@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CarHelp.Options
 {
-    internal class AuthorizationHeaderParameterOperationFilter : IOperationFilter
+    public class AuthorizationHeaderParameterOperationFilter : IOperationFilter
     {
         public void Apply(Operation operation, OperationFilterContext context)
         {

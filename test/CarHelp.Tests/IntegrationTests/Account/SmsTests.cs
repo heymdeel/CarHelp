@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace CarHelp.Tests.IntegrationTests.Account
 {
@@ -15,11 +14,9 @@ namespace CarHelp.Tests.IntegrationTests.Account
     {
         private readonly CustomWebAppFactory<Startup> factory;
         private readonly HttpClient _client;
-        private readonly ITestOutputHelper output;
 
-        public SmsTests(CustomWebAppFactory<Startup> factory, ITestOutputHelper output)
+        public SmsTests(CustomWebAppFactory<Startup> factory)
         {
-            this.output = output;
             this.factory = factory;
 
             Mapper.Reset();
@@ -31,7 +28,6 @@ namespace CarHelp.Tests.IntegrationTests.Account
         [InlineData("")]
         public async Task EmptyPhoneReturns400(string phone)
         {
-            output.WriteLine(CustomWebAppFactory<Startup>.x.ToString());
             // Arrange
             var uri = $"api/sms_code?phone={phone}";
 
@@ -46,7 +42,6 @@ namespace CarHelp.Tests.IntegrationTests.Account
         [InlineData("456465")]
         public async Task WrongPhoneReturns400(string phone)
         {
-            output.WriteLine(CustomWebAppFactory<Startup>.x.ToString());
             // Arrange
             var uri = $"api/sms_code?phone={phone}";
 
@@ -61,7 +56,6 @@ namespace CarHelp.Tests.IntegrationTests.Account
         [InlineData("79256542214")]
         public async Task CorrectPhoneReturns200(string phone)
         {
-            output.WriteLine(CustomWebAppFactory<Startup>.x.ToString());
             // Arrange
             var uri = $"api/sms_code?phone={phone}";
 
@@ -75,7 +69,6 @@ namespace CarHelp.Tests.IntegrationTests.Account
         [Fact]
         public async Task PhoneIsNullReturns400()
         {
-            output.WriteLine(CustomWebAppFactory<Startup>.x.ToString());
             // Arrange
             var uri = $"api/sms_code";
 

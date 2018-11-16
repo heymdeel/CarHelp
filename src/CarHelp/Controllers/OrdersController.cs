@@ -11,8 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarHelp.Controllers
 {
-    [Produces("application/json")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/orders")]
     [Route("api/orders")]
+    [Produces("application/json")]
     public class OrdersController : Controller
     {
         private readonly IOrdersService ordersService;

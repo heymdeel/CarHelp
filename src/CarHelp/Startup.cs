@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using CarHelp.AppLayer;
 using CarHelp.AppLayer.Models;
 using CarHelp.AppLayer.Services;
-using CarHelp.DAL;
 using CarHelp.DAL.Repositories;
 using CarHelp.Middlewares;
 using CarHelp.Options;
 using CarHelp.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.IO;
 
 namespace CarHelp
-{   
+{
     public class Startup
     {
         public IConfiguration Configuration { get; set; }
@@ -35,7 +30,6 @@ namespace CarHelp
         {
             // Configuration
             services.AddOptions();
-           
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<AuthOptions>(Configuration.GetSection("Authentication").GetSection("JWTBearer"));
 
@@ -51,8 +45,17 @@ namespace CarHelp
             // Authhorization
             services.AddTokenAuthorization(Configuration);
 
+            // MVC
             services.AddMvc();
-            
+
+            // API versioning
+            services.AddApiVersioning(o =>
+            {
+                o.AssumeDefaultVersionWhenUnspecified = true;
+                o.DefaultApiVersion = new ApiVersion(1, 0);
+            });
+
+            // Automapper
             // TODO: replace this with instance API
             Mapper.Initialize(cfg =>
             {
@@ -63,7 +66,7 @@ namespace CarHelp
             // Swagger
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info { Title = "CarHelp API", Version = "v1" });
+                options.SwaggerDoc("v1", new Info { Title = "CarHelp API", Version = "v1.0" });
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "CarHelp.xml"));
 
                 options.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
@@ -76,6 +79,7 @@ namespace CarHelp
             {
                 app.UseDeveloperExceptionPage();
 
+                // TODO: add api versioning
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {

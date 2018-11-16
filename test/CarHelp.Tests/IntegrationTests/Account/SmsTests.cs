@@ -19,8 +19,6 @@ namespace CarHelp.Tests.IntegrationTests.Account
         {
             this.factory = factory;
 
-            Mapper.Reset();
-
             _client = factory.CreateClient();
         }
 
@@ -67,7 +65,7 @@ namespace CarHelp.Tests.IntegrationTests.Account
         }
 
         [Fact]
-        public async Task PhoneIsNullReturns400()
+        public async Task NullPhoneReturns400()
         {
             // Arrange
             var uri = $"api/sms_code";

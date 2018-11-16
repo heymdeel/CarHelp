@@ -11,8 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarHelp.Controllers
 {
-    [Produces("application/json")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}")]
     [Route("api")]
+    [Produces("application/json")]
     public class AuthController : Controller
     {
         private readonly IAuthService authService;

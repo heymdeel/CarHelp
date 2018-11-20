@@ -1,4 +1,4 @@
-﻿using CarHelp.DAL.Repositories;
+﻿using CarHelp.DAL;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -13,6 +13,8 @@ namespace CarHelp.Tests
 {
     public class CustomWebAppFactory<TStartup> : WebApplicationFactory<Startup>, IAsyncLifetime
     {
+        public string ApiVersionPrefix { get; } = "api/v1/";
+
         private readonly IConfiguration configuration;
         private readonly PostgresCheckpoint checkpoint;
 

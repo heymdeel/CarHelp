@@ -1,10 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc.Testing;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -20,6 +16,7 @@ namespace CarHelp.Tests.IntegrationTests.Account
             this.factory = factory;
 
             _client = factory.CreateClient();
+            _client.BaseAddress = new Uri(_client.BaseAddress, factory.ApiVersionPrefix);
         }
 
         [Theory]
@@ -27,7 +24,7 @@ namespace CarHelp.Tests.IntegrationTests.Account
         public async Task EmptyPhoneReturns400(string phone)
         {
             // Arrange
-            var uri = $"api/sms_code?phone={phone}";
+            var uri = $"sms_code?phone={phone}";
 
             // Act
             var response = await _client.GetAsync(uri);
@@ -41,7 +38,7 @@ namespace CarHelp.Tests.IntegrationTests.Account
         public async Task WrongPhoneReturns400(string phone)
         {
             // Arrange
-            var uri = $"api/sms_code?phone={phone}";
+            var uri = $"sms_code?phone={phone}";
 
             // Act
             var response = await _client.GetAsync(uri);
@@ -55,7 +52,7 @@ namespace CarHelp.Tests.IntegrationTests.Account
         public async Task CorrectPhoneReturns200(string phone)
         {
             // Arrange
-            var uri = $"api/sms_code?phone={phone}";
+            var uri = $"sms_code?phone={phone}";
 
             // Act
             var response = await _client.GetAsync(uri);
@@ -68,7 +65,7 @@ namespace CarHelp.Tests.IntegrationTests.Account
         public async Task NullPhoneReturns400()
         {
             // Arrange
-            var uri = $"api/sms_code";
+            var uri = $"sms_code";
 
             // Act
             var response = await _client.GetAsync(uri);

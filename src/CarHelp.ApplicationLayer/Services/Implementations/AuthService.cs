@@ -24,13 +24,15 @@ namespace CarHelp.AppLayer.Services
         private readonly IRepository<UserProfile> profilesRepository;
         private readonly IRepository<Worker> workersRepository;
         private readonly AuthOptions authOptions;
+        private readonly IMapper mapper;
 
-        public AuthService(ISmsService smsService, IRepository<User> usersRepository, IRepository<UserProfile> profilesRepository, IOptions<AuthOptions> authOptions, IRepository<Worker> workersRepository)
+        public AuthService(ISmsService smsService, IRepository<User> usersRepository, IRepository<UserProfile> profilesRepository, IOptions<AuthOptions> authOptions, IRepository<Worker> workersRepository, IMapper mapper)
         {
             this.smsService = smsService;
             this.usersRepository = usersRepository;
             this.profilesRepository = profilesRepository;
             this.workersRepository = workersRepository;
+            this.mapper = mapper;
 
             this.authOptions = authOptions.Value;
         }
@@ -48,7 +50,7 @@ namespace CarHelp.AppLayer.Services
             }
 
             // it would be better to move this somewhere
-            var user = Mapper.Map<User>(userData);
+            var user = mapper.Map<User>(userData);
             user.Roles = new[] { "client", "worker" };
             user.DateOfRegistration = DateTime.Now;
             user.Profile.Phone = user.Phone;

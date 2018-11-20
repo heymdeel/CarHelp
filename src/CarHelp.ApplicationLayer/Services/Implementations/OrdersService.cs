@@ -18,11 +18,13 @@ namespace CarHelp.AppLayer.Services
     {
         private readonly IOrdersRepository ordersRepository;
         private readonly IRepository<RespondedWorkers> respondedWorkersRepository;
+        private readonly IMapper mapper;
 
-        public OrdersService(IOrdersRepository ordersRepository, IRepository<RespondedWorkers> respondedWorkersRepository)
+        public OrdersService(IOrdersRepository ordersRepository, IRepository<RespondedWorkers> respondedWorkersRepository, IMapper mapper)
         {
             this.ordersRepository = ordersRepository;
             this.respondedWorkersRepository = respondedWorkersRepository;
+            this.mapper = mapper;
         }
 
         public async Task AttachWorkerToOrderAsync(int clientId, int orderId, AttachWorkerInfo workerInfo)
@@ -55,7 +57,7 @@ namespace CarHelp.AppLayer.Services
 
         public async Task<IEnumerable<ClosestOrderDTO>> FindClosestOrdersAsync(SearchOrderInput searchInput)
         {
-            var searchDTO = Mapper.Map<DALSearchOrderDTO>(searchInput);
+            var searchDTO = mapper.Map<DALSearchOrderDTO>(searchInput);
 
             return await ordersRepository.FindClosestOrdersAsync(searchDTO);
         }
@@ -72,7 +74,7 @@ namespace CarHelp.AppLayer.Services
                 throw new BadInputException("client already has an actual order");
             }
 
-            var order = Mapper.Map<Order>(orderInput);
+            var order = mapper.Map<Order>(orderInput);
             order.ClientId = clientId;
             order.BeginningTime = DateTime.Now;
             order.StatusId = (int)OrdersStatuses.Awaiting;
@@ -106,7 +108,7 @@ namespace CarHelp.AppLayer.Services
                 throw new BadInputException("can't respond to this order, order status is not \"awaiting\"");
             }
 
-            var respondedWorker = Mapper.Map<RespondedWorkers>(workerData);
+            var respondedWorker = mapper.Map<RespondedWorkers>(workerData);
             respondedWorker.OrderId = orderId;
             respondedWorker.WorkerId = workerId;
 

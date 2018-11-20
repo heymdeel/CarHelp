@@ -13,17 +13,18 @@ namespace CarHelp.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}")]
-    [Route("api")]
     [Produces("application/json")]
     public class AuthController : Controller
     {
         private readonly IAuthService authService;
         private readonly ISmsService smsService;
+        private readonly IMapper mapper;
 
-        public AuthController(IAuthService authService, ISmsService smsService)
+        public AuthController(IAuthService authService, ISmsService smsService, IMapper mapper)
         {
             this.authService = authService;
             this.smsService = smsService;
+            this.mapper = mapper;
         }
 
         // GET: api/sms_code?phone
@@ -59,7 +60,7 @@ namespace CarHelp.Controllers
             User user = await authService.SignUpUserAsync(userData);
             var tokens = await authService.GenerateAndStoreTokensAsync(user);
 
-            var tokenVM = Mapper.Map<TokenVM>((tokens, user));
+            var tokenVM = mapper.Map<TokenVM>((tokens, user));
 
             return Ok(tokenVM);
         }
@@ -80,7 +81,7 @@ namespace CarHelp.Controllers
             User user = await authService.SignInUserAsync(userData);
             var tokens = await authService.GenerateAndStoreTokensAsync(user);
 
-            var tokenVM = Mapper.Map<TokenVM>((tokens, user));
+            var tokenVM = mapper.Map<TokenVM>((tokens, user));
 
             return Ok(tokenVM);
         }
@@ -95,7 +96,7 @@ namespace CarHelp.Controllers
         {
             var tokens = await authService.RefreshTokenAsync(refreshToken);
 
-            var tokenVM = Mapper.Map<TokenVM>(tokens);
+            var tokenVM = mapper.Map<TokenVM>(tokens);
 
             return Ok(tokenVM);
         }

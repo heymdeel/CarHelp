@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using CarHelp.AppLayer;
-using CarHelp.AppLayer.Models;
 using CarHelp.AppLayer.Services;
+using CarHelp.DAL;
 using CarHelp.DAL.Repositories;
 using CarHelp.Middlewares;
 using CarHelp.Options;
-using CarHelp.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -56,12 +55,7 @@ namespace CarHelp
             });
 
             // Automapper
-            // TODO: replace this with instance API
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfile(typeof(MappingProfileVM));
-                cfg.AddProfile(typeof(MappingProfileAppLayer));
-            });
+            services.AddAutoMapper();
 
             // Swagger
             services.AddSwaggerGen(options =>
@@ -79,7 +73,7 @@ namespace CarHelp
             {
                 app.UseDeveloperExceptionPage();
 
-                // TODO: add api versioning
+                // TODO: add api versioning to swagger
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {

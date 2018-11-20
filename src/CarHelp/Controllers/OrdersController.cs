@@ -13,14 +13,15 @@ namespace CarHelp.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/orders")]
-    [Route("api/orders")]
     [Produces("application/json")]
     public class OrdersController : Controller
     {
         private readonly IOrdersService ordersService;
+        private readonly IMapper mapper;
 
-        public OrdersController(IOrdersService ordersService)
+        public OrdersController(IOrdersService ordersService, IMapper mapper)
         {
+            this.mapper = mapper;
             this.ordersService = ordersService;
         }
 
@@ -40,7 +41,7 @@ namespace CarHelp.Controllers
             }
 
             var order = await ordersService.PlaceOrderAsync(orderData, User.GetUserId());
-            var orderVM = Mapper.Map<CreatedOrderVM>(order);
+            var orderVM = mapper.Map<CreatedOrderVM>(order);
 
             return Ok(orderVM);
         }
@@ -61,7 +62,7 @@ namespace CarHelp.Controllers
             }
 
             var orders = await ordersService.FindClosestOrdersAsync(searchInput);
-            var ordersVM = Mapper.Map<IEnumerable<ClosestOrderVM>>(orders);
+            var ordersVM = mapper.Map<IEnumerable<ClosestOrderVM>>(orders);
 
             return Ok(ordersVM);
         }

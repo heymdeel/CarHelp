@@ -10,7 +10,7 @@ using Npgsql;
 
 namespace CarHelp.DAL
 {
-    internal partial class DbContext : DataConnection
+    public partial class DbContext : DataConnection
     {
         public ITable<SmsCode> SmsCodes { get => GetTable<SmsCode>(); }
         public ITable<Order> Orders { get => GetTable<Order>(); }

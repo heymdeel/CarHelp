@@ -4,20 +4,21 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Respawn;
 using Respawn.Postgres;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace CarHelp.Tests
 {
-    public class CustomWebAppFactory<TStartup> : WebApplicationFactory<Startup>, IAsyncLifetime
+    public class CustomWebAppFactory<TStartup> : WebApplicationFactory<Startup>
     {
-        public string ApiVersionPrefix { get; } = "api/v1/";
-
         private readonly IConfiguration configuration;
-        private readonly PostgresCheckpoint checkpoint;
 
+        public string ApiVersionPrefix { get; } = "api/v1/";
+        
         public CustomWebAppFactory()
         {
             configuration = new ConfigurationBuilder()
@@ -25,23 +26,7 @@ namespace CarHelp.Tests
                 .AddJsonFile("appsettings_test.json")
                 .AddEnvironmentVariables()
                 .Build();
-            
-            checkpoint = new PostgresCheckpoint()
-            {
-                TablesToIgnore = new[] { "orders_categories", "orders_status", "workers_status" },
-                AutoCreateExtensions = true,
-                SchemasToInclude = new [] { "public" }
-            };
         }
-
-        public async Task DisposeAsync() { }
-
-        public async Task InitializeAsync()
-        {
-            await checkpoint.Reset(configuration.GetConnectionString("DefaultConnection"));
-        }
-
-        public async Task ResetDB() => await checkpoint.Reset(configuration.GetConnectionString("DefaultConnection"));
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
